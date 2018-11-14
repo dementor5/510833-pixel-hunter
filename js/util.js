@@ -1,0 +1,44 @@
+'use strict';
+(function () {
+  const LEFT_KEYCODE = 37;
+  const RIGHT_KEYCODE = 39;
+  const FIRST_ARRAY_INDEX = 0;
+
+  function getLastArrayIndex(array) {
+    return array.length - 1;
+  }
+
+  function getCopyTemplateInnerEls(template) {
+    const content = template.content;
+    const els = [];
+
+    for (let i = 0; i < content.childElementCount; i++) {
+      els.push(content.children[i].cloneNode(true));
+    }
+
+    return els;
+  }
+
+  function getFilledFragment(els) {
+    const fragment = document.createDocumentFragment();
+    els.forEach((el) => fragment.appendChild(el));
+    return fragment;
+  }
+
+  function replaceChilds(el, childEl) {
+    if (el.children.length) {
+      el.innerHTML = ``;
+    }
+    el.appendChild(childEl);
+  }
+
+  window.util = {
+    LEFT_KEYCODE,
+    RIGHT_KEYCODE,
+    FIRST_ARRAY_INDEX,
+    getLastArrayIndex,
+    getCopyTemplateInnerEls,
+    getFilledFragment,
+    replaceChilds
+  };
+})();

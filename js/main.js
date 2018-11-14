@@ -1,14 +1,17 @@
 'use strict';
 (function () {
-  const bodyEl = document.body;
   const mainEl = document.querySelector(`#main`);
-  const introTemplate = document.querySelector(`#intro`);
-  const greetingTemplate = document.querySelector(`#greeting`);
-  const rulesTemplate = document.querySelector(`#rules`);
-  const game1Template = document.querySelector(`#game-1`);
-  const game2Template = document.querySelector(`#game-2`);
-  const game3Template = document.querySelector(`#game-3`);
-  const statsTemplate = document.querySelector(`#stats`);
+  const templates = [
+    `intro`,
+    `greeting`,
+    `rules`,
+    `game-1`,
+    `game-2`,
+    `game-3`,
+    `stats`
+  ].map((it) => document.querySelector(`#` + it));
+  const lastScreenNumber = window.util.getLastArrayIndex(templates);
+  let currentScreenNumber = window.util.FIRST_ARRAY_INDEX;
   const arrowBeforeClass = `arrow__btn--before`;
   const arrrowAfterClass = `arrow__btn--after`;
   const arrowsHTMLCode =
@@ -29,29 +32,18 @@
     <button class="arrows__btn ${arrowBeforeClass}"><-</button>
     <button class="arrows__btn ${arrrowAfterClass}">-></button>
   </div>`;
-  const templates = [
-    introTemplate,
-    greetingTemplate,
-    rulesTemplate,
-    game1Template,
-    game2Template,
-    game3Template,
-    statsTemplate
-  ];
-  const lastScreenNumber = window.util.getLastArrayIndex(templates);
-  let currentScreen = window.util.FIRST_ARRAY_INDEX;
 
   addGlobalListener();
-  renderScreen(currentScreen);
+  renderScreen(currentScreenNumber);
   appendArrowsOnPage();
 
   function addGlobalListener() {
     document.addEventListener(`keydown`, (evt) => {
-      switch (evt.keyCode) {
-        case window.util.LEFT_KEYCODE:
+      switch (evt.code) {
+        case `ArrowLeft`:
           renderPreviosScreen();
           break;
-        case window.util.RIGHT_KEYCODE:
+        case `ArrowRight`:
           renderNextScreen();
           break;
       }
@@ -59,23 +51,25 @@
   }
 
   function renderPreviosScreen() {
-    if (currentScreen > window.util.FIRST_ARRAY_INDEX) {
-      renderScreen(currentScreen - 1);
+    if (currentScreenNumber > window.util.FIRST_ARRAY_INDEX) {
+      const previosScreenNumber = currentScreenNumber - 1;
+      renderScreen(previosScreenNumber);
     }
   }
 
   function renderNextScreen() {
-    if (currentScreen < lastScreenNumber) {
-      renderScreen(currentScreen + 1);
+    if (currentScreenNumber < lastScreenNumber) {
+      const nextScreenNumber = currentScreenNumber + 1;
+      renderScreen(nextScreenNumber);
     }
   }
 
-  function renderScreen(number) {
-    const template = templates[number];
+  function renderScreen(screenNumber) {
+    const template = templates[screenNumber];
     const innerEls = window.util.getCopyTemplateInnerEls(template);
     const filledFragment = window.util.getFilledFragment(innerEls);
     window.util.replaceChilds(mainEl, filledFragment);
-    currentScreen = number;
+    currentScreenNumber = screenNumber;
   }
 
   function appendArrowsOnPage() {
@@ -84,7 +78,7 @@
     const arrowsWrapEl = template.content.firstChild;
 
     addListenersOnArrowsWrapEl(arrowsWrapEl);
-    bodyEl.appendChild(arrowsWrapEl);
+    document.body.appendChild(arrowsWrapEl);
   }
 
   function addListenersOnArrowsWrapEl(el) {

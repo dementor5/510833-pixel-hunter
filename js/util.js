@@ -1,7 +1,5 @@
 'use strict';
 (function () {
-  const LEFT_KEYCODE = 37;
-  const RIGHT_KEYCODE = 39;
   const FIRST_ARRAY_INDEX = 0;
 
   function getLastArrayIndex(array) {
@@ -33,8 +31,6 @@
   }
 
   window.util = {
-    LEFT_KEYCODE,
-    RIGHT_KEYCODE,
     FIRST_ARRAY_INDEX,
     getLastArrayIndex,
     getCopyTemplateInnerEls,

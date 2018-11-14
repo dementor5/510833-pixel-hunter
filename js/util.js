@@ -6,21 +6,12 @@
     return array.length - 1;
   }
 
-  function getCopyTemplateInnerEls(template) {
-    const content = template.content;
-    const els = [];
-
-    for (let i = 0; i < content.childElementCount; i++) {
-      els.push(content.children[i].cloneNode(true));
-    }
-
-    return els;
-  }
-
-  function getFilledFragment(els) {
+  function getFixedFragment(template) {
+    const content = template.content.cloneNode(true);
+    const children = Array.from(content.children);
     const fragment = document.createDocumentFragment();
-    els.forEach((el) => fragment.appendChild(el));
-    return fragment;
+    children.forEach((it) => fragment.appendChild(it));
+    return fragment.cloneNode(true);
   }
 
   function replaceChilds(el, childEl) {
@@ -30,11 +21,17 @@
     el.appendChild(childEl);
   }
 
+  function getElFromStr(string) {
+    const div = document.createElement(`div`);
+    div.innerHTML = string;
+    return div.firstChild;
+  }
+
   window.util = {
     FIRST_ARRAY_INDEX,
     getLastArrayIndex,
-    getCopyTemplateInnerEls,
-    getFilledFragment,
-    replaceChilds
+    getFixedFragment,
+    replaceChilds,
+    getElFromStr
   };
 })();

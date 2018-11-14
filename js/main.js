@@ -1,8 +1,5 @@
 'use strict';
 (function () {
-  const LEFT_KEYCODE = 37;
-  const RIGHT_KEYCODE = 39;
-  const FIRST_ARRAY_INDEX = 0;
   const bodyEl = document.body;
   const mainEl = document.querySelector(`#main`);
   const introTemplate = document.querySelector(`#intro`);
@@ -45,16 +42,12 @@
     modalErrorTemplate,
     modalConfirmTemplate
   ];
-  const lastScreenNumber = getLastArrayIndex(templates);
-  let currentScreen = FIRST_ARRAY_INDEX;
+  const lastScreenNumber = window.util.getLastArrayIndex(templates);
+  let currentScreen = window.util.FIRST_ARRAY_INDEX;
 
   appendArrowsOnPage();
   addGlobalListener();
   renderScreen(currentScreen);
-
-  function getLastArrayIndex(array) {
-    return array.length - 1;
-  }
 
   function appendArrowsOnPage() {
     const template = document.createElement(`template`);
@@ -80,10 +73,10 @@
   function addGlobalListener() {
     document.addEventListener(`keydown`, (evt) => {
       switch (evt.keyCode) {
-        case LEFT_KEYCODE:
+        case window.util.LEFT_KEYCODE:
           renderPreviosScreen();
           break;
-        case RIGHT_KEYCODE:
+        case window.util.RIGHT_KEYCODE:
           renderNextScreen();
           break;
       }
@@ -91,54 +84,23 @@
   }
 
   function renderPreviosScreen() {
-    if (currentScreen > FIRST_ARRAY_INDEX) {
-      renderScreen(--currentScreen);
+    if (currentScreen > window.util.FIRST_ARRAY_INDEX) {
+      currentScreen--;
+      renderScreen(currentScreen);
     }
   }
 
   function renderNextScreen() {
     if (currentScreen < lastScreenNumber) {
-      renderScreen(++currentScreen);
+      currentScreen++;
+      renderScreen(currentScreen);
     }
   }
 
   function renderScreen(number) {
-    const templateInnerEls = getCopyTemplateInnerEls(templates[number]);
-    const filledFragment = getFilledFragment(templateInnerEls);
-    replaceChild(mainEl, filledFragment);
-  }
-
-  function getCopyTemplateInnerEls(template) {
-    const content = template.content;
-    const els = [];
-
-    for (let i = 0; i < content.childElementCount; i++) {
-      els.push(content.children[i].cloneNode(true));
-    }
-
-    return els;
-  }
-
-  function getFilledFragment(els) {
-    const fragment = document.createDocumentFragment();
-    els.forEach((el) => fragment.appendChild(el));
-    return fragment;
-  }
-
-  function replaceChild(el, fragment) {
-    removeChildEls(el);
-    el.appendChild(fragment);
-  }
-
-  function removeChildEls(el) {
-    let children = el.children;
-    if (children.length) {
-      children = convertToArray(children);
-      children.forEach((it) => it.remove());
-    }
-  }
-
-  function convertToArray(collection) {
-    return Array.prototype.slice.call(collection);
+    const template = templates[number];
+    const innerEls = window.util.getCopyTemplateInnerEls(template);
+    const filledFragment = window.util.getFilledFragment(innerEls);
+    window.util.replaceChild(mainEl, filledFragment);
   }
 })();

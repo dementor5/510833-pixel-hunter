@@ -66,25 +66,20 @@
 
   function renderScreen(screenNumber) {
     const template = templates[screenNumber];
-    const innerEls = window.util.getCopyTemplateInnerEls(template);
-    const filledFragment = window.util.getFilledFragment(innerEls);
-    window.util.replaceChilds(mainEl, filledFragment);
+    const fragment = window.util.getFixedFragment(template);
+    window.util.replaceChilds(mainEl, fragment);
     currentScreenNumber = screenNumber;
   }
 
   function appendArrowsOnPage() {
-    const template = document.createElement(`template`);
-    template.innerHTML = arrowsHTMLCode;
-    const arrowsWrapEl = template.content.firstChild;
-
-    addListenersOnArrowsWrapEl(arrowsWrapEl);
+    const arrowsWrapEl = window.util.getElFromStr(arrowsHTMLCode);
+    addListenerOnArrowsWrapEl(arrowsWrapEl);
     document.body.appendChild(arrowsWrapEl);
   }
 
-  function addListenersOnArrowsWrapEl(el) {
+  function addListenerOnArrowsWrapEl(el) {
     el.addEventListener(`click`, (evt) => {
       const classList = evt.target.classList;
-
       if (classList.contains(arrowBeforeClass)) {
         renderPreviosScreen();
       } else if (classList.contains(arrrowAfterClass)) {

@@ -10,6 +10,8 @@ const server = require(`browser-sync`).create();
 const mqpacker = require(`css-mqpacker`);
 const minify = require(`gulp-csso`);
 const rename = require(`gulp-rename`);
+const rollup = require(`gulp-better-rollup`);
+const sourcemaps = require(`gulp-sourcemaps`);
 const imagemin = require(`gulp-imagemin`);
 const svgstore = require(`gulp-svgstore`);
 
@@ -46,9 +48,12 @@ gulp.task(`sprite`, () => {
 });
 
 gulp.task(`scripts`, () => {
-  return gulp.src(`js/**/*.js`).
-    pipe(plumber()).
-    pipe(gulp.dest(`build/js/`));
+  return gulp.src(`js/**/*.js`)
+    .pipe(plumber())
+    .pipe(sourcemaps.init())
+    .pipe(rollup({}, `iife`))
+    .pipe(sourcemaps.write(``))
+    .pipe(gulp.dest(`build/js/`));
 });
 
 gulp.task(`imagemin`, [`copy`], () => {

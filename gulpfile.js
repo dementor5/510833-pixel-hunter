@@ -1,4 +1,4 @@
-'use strict';
+'use strict'; // eslint-disable-line
 
 const del = require(`del`);
 const gulp = require(`gulp`);

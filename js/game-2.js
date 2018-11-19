@@ -50,20 +50,16 @@ const template =
 </section>`;
 const element = getElementFromTemplate(template);
 const backButton = element.querySelector(`.back`);
-const gameContent = element.querySelector(`.game__content`);
+const answerForm = element.querySelector(`.game__content`);
 
 backButton.addEventListener(`click`, () => changeScreen(greetingEl));
+answerForm.addEventListener(`change`, (evt) => switchToNextScreenIfNeeded(evt.currentTarget));
 
-gameContent.addEventListener(`change`, (evt) => {
-  const form = evt.currentTarget;
-  if (checkFormStatus(form)) {
+function switchToNextScreenIfNeeded(form) {
+  const formData = new FormData(form);
+  if (formData.has(`question1`)) {
     changeScreen(game3El);
   }
-});
-
-function checkFormStatus(form) {
-  const formData = new FormData(form);
-  return formData.has(`question1`);
 }
 
 export default element;

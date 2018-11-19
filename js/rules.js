@@ -35,22 +35,18 @@ const backButton = element.querySelector(`.back`);
 const rulesForm = element.querySelector(`.rules__form`);
 const rulesInput = rulesForm.querySelector(`.rules__input`);
 const rulesButton = rulesForm.querySelector(`.rules__button`);
-let fieldIsFilled = false;
+let fieldIsEmpty = true;
 
 backButton.addEventListener(`click`, () => changeScreen(greetingEl));
 
 rulesInput.addEventListener(`input`, (env) => {
-  fieldIsFilled = env.target.value.length > 0;
-  setSubmitButtonState();
+  fieldIsEmpty = env.target.value.length === 0;
+  rulesButton.disabled = fieldIsEmpty;
 });
-
-function setSubmitButtonState() {
-  rulesButton.disabled = fieldIsFilled ? false : true;
-}
 
 rulesForm.addEventListener(`submit`, (evt) => {
   evt.preventDefault();
-  if (fieldIsFilled) {
+  if (!fieldIsEmpty) {
     changeScreen(game1El);
   }
 });

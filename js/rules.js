@@ -33,22 +33,26 @@ const template =
 const element = getElementFromTemplate(template);
 const backButton = element.querySelector(`.back`);
 const rulesForm = element.querySelector(`.rules__form`);
-const rulesInput = rulesForm.querySelector(`.rules__input`);
-const rulesButton = rulesForm.querySelector(`.rules__button`);
-let fieldIsEmpty = true;
+const fieldNameEl = rulesForm.querySelector(`.rules__input`);
+const submitButton = rulesForm.querySelector(`.rules__button`);
+let fieldNameElIsEmpty = true;
 
 backButton.addEventListener(`click`, () => changeScreen(greetingEl));
-
-rulesInput.addEventListener(`input`, (env) => {
-  fieldIsEmpty = env.target.value.length === 0;
-  rulesButton.disabled = fieldIsEmpty;
-});
-
+fieldNameEl.addEventListener(`input`, (env) => checkFieldLength(env.target.value.length));
 rulesForm.addEventListener(`submit`, (evt) => {
   evt.preventDefault();
-  if (!fieldIsEmpty) {
+  switchToNextScreenIfNeeded();
+});
+
+function checkFieldLength(length) {
+  fieldNameElIsEmpty = length === 0;
+  submitButton.disabled = fieldNameElIsEmpty;
+}
+
+function switchToNextScreenIfNeeded() {
+  if (!fieldNameElIsEmpty) {
     changeScreen(game1El);
   }
-});
+}
 
 export default element;

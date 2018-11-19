@@ -52,11 +52,14 @@ const backButton = element.querySelector(`.back`);
 const gameContent = element.querySelector(`.game__content`);
 
 backButton.addEventListener(`click`, () => changeScreen(greetingEl));
-
 gameContent.addEventListener(`click`, (evt) => {
-  if (evt.target.tagName === `IMG`) {
+  switchToNextScreenIfNeeded(evt.target.tagName);
+});
+
+function switchToNextScreenIfNeeded(tagName) {
+  if (tagName === `IMG`) {
     changeScreen(statsEl);
   }
-});
+}
 
 export default element;

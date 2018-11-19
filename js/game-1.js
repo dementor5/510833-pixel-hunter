@@ -64,17 +64,14 @@ const backButton = element.querySelector(`.back`);
 const gameContent = element.querySelector(`.game__content`);
 
 backButton.addEventListener(`click`, () => changeScreen(greetingEl));
-
-gameContent.addEventListener(`change`, (evt) => {
-  const form = evt.currentTarget;
-  if (checkFormStatus(form)) {
-    changeScreen(game2El);
-  }
-});
+gameContent.addEventListener(`change`, (evt) => checkFormStatus(evt.currentTarget));
 
 function checkFormStatus(form) {
   const formData = new FormData(form);
-  return formData.has(`question1`) && formData.has(`question2`);
+  const formStatus = formData.has(`question1`) && formData.has(`question2`);
+  if (formStatus) {
+    changeScreen(game2El);
+  }
 }
 
 export default element;

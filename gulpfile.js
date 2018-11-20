@@ -120,9 +120,8 @@ gulp.task(`test`, () => {
   return gulp
     .src([`js/**/*.test.js`])
     .pipe(rollup({
-      plugins: [
-        commonjs()
-      ]}, `cjs`))
+      plugins: [commonjs()],
+      external: [`chai`]}, `cjs`))
     .pipe(gulp.dest(`build/test`))
     .pipe(mocha({
       reporter: `spec`

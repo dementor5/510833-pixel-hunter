@@ -127,3 +127,8 @@ gulp.task(`test`, () => {
       reporter: `spec`
     }));
 });
+
+gulp.task(`test-watch`, () => {
+  gulp.start(`test`);
+  gulp.watch(`js/**/*.js`, [`test`]);
+});

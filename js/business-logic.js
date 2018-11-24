@@ -1,46 +1,80 @@
-const questionsCount = 10;
-const correctAnswerAward = 100;
-const longSpeedTimeLimit = 20;
-const shortSpeedTimeLimit = 10;
-const bonusPoints = 50;
+const RULES = {
+  startLiveCount: 3,
+  correctAnswerAward: 100,
+  perLiveAward: 50,
+  fastAnswerAward: 50,
+  slowAnswerPenalty: 50,
+  losePoints: -1,
+  questionsCount: 10,
+  fastAnswerTime: 10,
+  SlowAnswerTime: 20
+};
 
-function sumUpResult(answers, liveCount) {
+function calculatePoints(answers, livesCount) {
   if (typeof answers !== `object`) {
     throw new Error(`answers should be of type object`);
   }
-
-  if (typeof liveCount !== `number`) {
+  if (typeof livesCount !== `number`) {
     throw new Error(`liveCount should be of type number`);
   }
-
-  if (liveCount < 0) {
+  if (livesCount < 0) {
     throw new Error(`liveCount should not be negative value`);
   }
 
-  let result = 0;
+  let pointsCount = 0;
 
-  if (answers.length < questionsCount) {
-    result = -1;
-    return result;
+  if (answers.length < RULES.questionsCount) {
+    pointsCount = RULES.losePoints;
+    return pointsCount;
   }
 
   answers.forEach((it) => {
     if (it.correct) {
-      result += correctAnswerAward;
+      pointsCount += RULES.correctAnswerAward;
 
-      if (it.time > longSpeedTimeLimit) {
-        result -= bonusPoints;
-      } else if (it.time < shortSpeedTimeLimit) {
-        result += bonusPoints;
+      if (it.time < RULES.fastAnswerTime) {
+        pointsCount += RULES.fastAnswerAward;
+      } else if (it.time > RULES.SlowAnswerTime) {
+        pointsCount -= RULES.slowAnswerPenalty;
       }
     }
   });
 
-  result += bonusPoints * liveCount;
+  pointsCount += livesCount * RULES.perLiveAward;
 
-  return result;
+  return pointsCount;
+}
+
+function reduceLivesCount(livesCount) {
+  return --livesCount;
+}
+
+function changeScreen(currentScreen) {
+  return ++currentScreen;
+}
+
+function checkTime(time) {
+  if (typeof time !== `number`) {
+    throw new Error(`time should be of type number`);
+  }
+  if (time < 0) {
+    throw new Error(`time should not be negative value`);
+  }
+
+  let checkResult = null;
+
+  if (time < RULES.fastAnswerTime) {
+    checkResult = `fast`;
+  } else if (time > RULES.SlowAnswerTime) {
+    checkResult = `slow`;
+  }
+
+  return checkResult;
 }
 
 export {
-  sumUpResult
+  calculatePoints,
+  reduceLivesCount,
+  changeScreen,
+  checkTime
 };

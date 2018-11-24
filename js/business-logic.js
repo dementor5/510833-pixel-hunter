@@ -1,14 +1,4 @@
-const RULES = {
-  startLiveCount: 3,
-  correctAnswerAward: 100,
-  perLiveAward: 50,
-  fastAnswerAward: 50,
-  slowAnswerPenalty: 50,
-  losePoints: -1,
-  questionsCount: 10,
-  fastAnswerTime: 10,
-  SlowAnswerTime: 20
-};
+import {Rule} from './constants.js';
 
 function calculatePoints(answers, livesCount) {
   if (typeof answers !== `object`) {
@@ -23,24 +13,24 @@ function calculatePoints(answers, livesCount) {
 
   let pointsCount = 0;
 
-  if (answers.length < RULES.questionsCount) {
-    pointsCount = RULES.losePoints;
+  if (answers.length < Rule.QUESTIONS_COUNT) {
+    pointsCount = Rule.LOSE_POINTS;
     return pointsCount;
   }
 
   answers.forEach((it) => {
     if (it.correct) {
-      pointsCount += RULES.correctAnswerAward;
+      pointsCount += Rule.CORRECT_ANSWER_AWARD;
 
-      if (it.time < RULES.fastAnswerTime) {
-        pointsCount += RULES.fastAnswerAward;
-      } else if (it.time > RULES.SlowAnswerTime) {
-        pointsCount -= RULES.slowAnswerPenalty;
+      if (it.time < Rule.FAST_ANSWER_TIME) {
+        pointsCount += Rule.FAST_ANSWER_AWARD;
+      } else if (it.time > Rule.SLOW_ANSWER_TIME) {
+        pointsCount -= Rule.SOLOW_ANSWER_PENALTY;
       }
     }
   });
 
-  pointsCount += livesCount * RULES.perLiveAward;
+  pointsCount += livesCount * Rule.PER_LIVE_AWARD;
 
   return pointsCount;
 }
@@ -63,9 +53,9 @@ function checkTime(time) {
 
   let checkResult = null;
 
-  if (time < RULES.fastAnswerTime) {
+  if (time < Rule.FAST_ANSWER_TIME) {
     checkResult = `fast`;
-  } else if (time > RULES.SlowAnswerTime) {
+  } else if (time > Rule.SLOW_ANSWER_TIME) {
     checkResult = `slow`;
   }
 

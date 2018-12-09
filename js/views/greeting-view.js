@@ -27,7 +27,7 @@ export default class GreetingView extends AbstractView {
 
   bind() {
     const button = this._element.querySelector(`.greeting__continue`);
-    button.addEventListener(`click`, () => this.onClick());
+    button.addEventListener(`click`, this.onClick);
   }
 
   onClick() {}

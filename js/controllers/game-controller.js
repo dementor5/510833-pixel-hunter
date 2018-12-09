@@ -33,6 +33,8 @@ function getRenderScreenFunction(type) {
     case `two-of-two`:
       renderGameScreen = renderTwoOfTwo;
       break;
+    default:
+      throw new Error(`Unknown type: ${type}`);
   }
   return renderGameScreen;
 }

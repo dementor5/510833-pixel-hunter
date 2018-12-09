@@ -1,11 +1,11 @@
-import showIntroScreen from './intro-controller.js';
+import {INITIAL_GAME} from '../constants';
+import getLevels from '../mockup-data';
+import {checkAnswers, checkLives, changeLevel, checkResults} from '../logic';
+import showIntroScreen from './intro-controller';
 import showGreetinScreen from './greeting-controller';
 import showRulesScreen from './rules-controller';
-import {INITIAL_GAME} from './constants.js';
-import getLevels from './mockup-data.js';
-import showGameScreen from './game-controller.js';
-import {checkAnswers, checkLives, changeLevel, checkResults} from './logic.js';
-import showResultScreen from './result-controller.js';
+import showGameScreen from './game-controller';
+import showResultScreen from './result-controller';
 
 const gameData = Object.assign({}, INITIAL_GAME, {levels: getLevels()});
 

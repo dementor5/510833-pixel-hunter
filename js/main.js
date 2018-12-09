@@ -1,2 +1,2 @@
-import {intro} from './data-controller.js';
+import {intro} from './controllers/data-controller';
 intro();

@@ -19,11 +19,6 @@ import {
 describe(`logic.test.js`, () => {
 
   describe(`checkAnswer()`, () => {
-    const Rule = {
-      FAST_ANSWER_TIME: 10,
-      SLOW_ANSWER_TIME: 20,
-    };
-
     it(`tinder-like should return wrong on wrong answer`, () => {
       const userAnswer = {question1: `photo`};
       const level = {
@@ -33,7 +28,7 @@ describe(`logic.test.js`, () => {
         }],
       };
       const time = 15;
-      assert.equal(checkAnswer(userAnswer, level, time, Rule), `wrong`);
+      assert.equal(checkAnswer(userAnswer, level, time), `wrong`);
     });
 
     it(`tinder-like should return correct on correct answer`, () => {
@@ -45,7 +40,7 @@ describe(`logic.test.js`, () => {
         }],
       };
       const time = 15;
-      assert.equal(checkAnswer(userAnswer, level, time, Rule), `correct`);
+      assert.equal(checkAnswer(userAnswer, level, time), `correct`);
     });
 
     it(`tinder-like should return slow on correct slow answer`, () => {
@@ -57,7 +52,7 @@ describe(`logic.test.js`, () => {
         }],
       };
       const time = 25;
-      assert.equal(checkAnswer(userAnswer, level, time, Rule), `slow`);
+      assert.equal(checkAnswer(userAnswer, level, time), `slow`);
     });
 
     it(`tinder-like should return fast on correct fast answer`, () => {
@@ -69,7 +64,7 @@ describe(`logic.test.js`, () => {
         }],
       };
       const time = 5;
-      assert.equal(checkAnswer(userAnswer, level, time, Rule), `fast`);
+      assert.equal(checkAnswer(userAnswer, level, time), `fast`);
     });
 
   });
@@ -183,30 +178,26 @@ describe(`logic.test.js`, () => {
 
 
   describe(`checkTime()`, () => {
-    const Rule = {
-      FAST_ANSWER_TIME: 10,
-      SLOW_ANSWER_TIME: 20,
-    };
     it(`shold return 'fast' if time to answer on question < 10`, () => {
       const time = 8;
-      assert.equal(checkTime(time, Rule), `fast`);
+      assert.equal(checkTime(time), `fast`);
     });
     it(`shold return 'slow' if time to answer on question > 20`, () => {
       const time = 22;
-      assert.equal(checkTime(time, Rule), `slow`);
+      assert.equal(checkTime(time), `slow`);
     });
     it(`shold return 'correct' if time to answer on question >= 10 and <= 20`, () => {
       const time = 15;
-      assert.equal(checkTime(time, Rule), `correct`);
+      assert.equal(checkTime(time), `correct`);
     });
     it(`argument should not be a non number vaule`, () => {
       const time = `some string`;
-      assert.throws(() => checkTime(time, Rule), `time should be of type number`);
+      assert.throws(() => checkTime(time), `time should be of type number`);
     });
 
     it(`argument should not be negative value`, () => {
       const time = -10;
-      assert.throws(() => checkTime(time, Rule), `time should not be negative value`);
+      assert.throws(() => checkTime(time), `time should not be negative value`);
     });
   });
 
@@ -254,12 +245,6 @@ describe(`logic.test.js`, () => {
           `correct`,
         ],
       };
-      const rules = {
-        PER_LIVE_AWARD: 50,
-        CORRECT_ANSWER_AWARD: 100,
-        FAST_ANSWER_AWARD: 50,
-        SLOW_ANSWER_PENALTY: 50,
-      };
       const gameResult = {
         lives: {count: 4, points: 200},
         correct: {count: 9, points: 900},
@@ -267,7 +252,7 @@ describe(`logic.test.js`, () => {
         slow: {count: 1, points: -50},
         totalPoints: 1150,
       };
-      assert.deepEqual(checkResults(game, rules), gameResult);
+      assert.deepEqual(checkResults(game), gameResult);
     });
   });
 

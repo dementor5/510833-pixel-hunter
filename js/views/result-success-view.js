@@ -1,10 +1,10 @@
-import AbstractView from './abstract-view';
+import AbstractView from '../abstract-view';
+import {Rule} from '../settings.js';
 
 export default class ResultSuccessView extends AbstractView {
-  constructor(game, rules, resultNumber, statsTemplate) {
+  constructor(game, resultNumber, statsTemplate) {
     super();
     this._game = game;
-    this._rules = rules;
     this._resultNumber = resultNumber;
     this._statsTemplate = statsTemplate;
     this._speedTemplate = !game.fast.count ? `` :
@@ -12,7 +12,7 @@ export default class ResultSuccessView extends AbstractView {
         <td></td>
         <td class="result__extra">Бонус за скорость:</td>
         <td class="result__extra">${game.fast.count} <span class="stats__result stats__result--fast"></span></td>
-        <td class="result__points">× ${rules.FAST_ANSWER_AWARD}</td>
+        <td class="result__points">× ${Rule.FAST_ANSWER_AWARD}</td>
         <td class="result__total">${game.fast.points}</td>
       </tr>`;
     this._livesTemplate = !game.lives.count ? `` :
@@ -20,7 +20,7 @@ export default class ResultSuccessView extends AbstractView {
         <td></td>
         <td class="result__extra">Бонус за жизни:</td>
         <td class="result__extra">${game.lives.count} <span class="stats__result stats__result--alive"></span></td>
-        <td class="result__points">× ${rules.PER_LIVE_AWARD}</td>
+        <td class="result__points">× ${Rule.PER_LIVE_AWARD}</td>
         <td class="result__total">${game.lives.points}</td>
       </tr>`;
     this._slowTemplate = !game.slow.count ? `` :
@@ -28,7 +28,7 @@ export default class ResultSuccessView extends AbstractView {
         <td></td>
         <td class="result__extra">Штраф за медлительность:</td>
         <td class="result__extra">${game.slow.count} <span class="stats__result stats__result--slow"></span></td>
-        <td class="result__points">× ${rules.SLOW_ANSWER_PENALTY}</td>
+        <td class="result__points">× ${Rule.SLOW_ANSWER_PENALTY}</td>
         <td class="result__total">${game.slow.points}</td>
       </tr>`;
   }
@@ -41,7 +41,7 @@ export default class ResultSuccessView extends AbstractView {
           <td colspan="2">
             ${this._statsTemplate}
           </td>
-          <td class="result__points">× ${this._rules.CORRECT_ANSWER_AWARD}</td>
+          <td class="result__points">× ${Rule.CORRECT_ANSWER_AWARD}</td>
           <td class="result__total">${this._game.correct.points}</td>
         </tr>
         ${this._speedTemplate}

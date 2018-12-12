@@ -1,19 +1,23 @@
-import AbstractView from './abstract-view';
+import AbstractView from '../abstract-view';
+import {Rule} from '../settings';
 
 export default class BarView extends AbstractView {
   constructor(time, livesAmount) {
     super();
     this._time = time;
     this._livesAmount = livesAmount;
+    this.heartTemplate = ``;
+    const heartsForDrawing = Rule.INITIAL_LIVE_COUNT - 1;
+    for (let i = heartsForDrawing; i >= 1; i--) {
+      this.heartTemplate += this._drawHeart(this._livesAmount > i);
+    }
   }
 
   get template() {
     return `
       <div class="game__timer">${this._time}</div>
       <div class="game__lives">
-        ${this._drawHeart(this._livesAmount > 3)}
-        ${this._drawHeart(this._livesAmount > 2)}
-        ${this._drawHeart(this._livesAmount > 1)}
+        ${this.heartTemplate}
       </div>`;
   }
 

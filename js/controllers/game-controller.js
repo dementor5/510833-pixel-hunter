@@ -4,7 +4,7 @@ import StatsView from '../views/stats-view';
 import tinderLike from './tinder-like-controller';
 import initOneOfThree from './one-of-three-controller';
 import initTwoOfTwo from './two-of-two-controller';
-import ONE_SECOND from '../constants';
+import {ONE_SECOND} from '../settings';
 import Application from '../application';
 
 export default class GameController {

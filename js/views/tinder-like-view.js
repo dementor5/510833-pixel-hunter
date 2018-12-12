@@ -1,4 +1,4 @@
-import AbstractView from './abstract-view';
+import AbstractView from '../abstract-view';
 
 export default class TinderLikeView extends AbstractView {
   constructor(level, statsTemplate) {

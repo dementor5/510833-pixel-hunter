@@ -18,7 +18,7 @@ export default class ResultConroller {
       const statsTemplate = new StatsView(game.answerResults, model.levels.length).template;
 
       const resultTemplate = game.lives.count
-        ? new ResultSuccessView(game, model.rules, resultNumber, statsTemplate).template
+        ? new ResultSuccessView(game, resultNumber, statsTemplate).template
         : new ResultFailView(resultNumber, statsTemplate).template;
 
       results += resultTemplate;

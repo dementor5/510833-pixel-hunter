@@ -1,4 +1,6 @@
-export function checkAnswer(userAnswer, level, time, rules) {
+import {Rule} from './settings';
+
+export function checkAnswer(userAnswer, level, time) {
   let result;
   switch (level.type) {
     case `two-of-two`:
@@ -11,7 +13,7 @@ export function checkAnswer(userAnswer, level, time, rules) {
       result = checkOneOfThree(level.answers, userAnswer);
   }
 
-  return result ? checkTime(time, rules) : `wrong`;
+  return result ? checkTime(time) : `wrong`;
 }
 
 export function checkTwoOfTwo(correctAnswers, answer) {
@@ -46,7 +48,7 @@ export function getUniqueArrayElement(array) {
   return element;
 }
 
-export function checkTime(time, rules) {
+export function checkTime(time) {
   if (typeof time !== `number`) {
     throw new Error(`time should be of type number`);
   }
@@ -55,9 +57,9 @@ export function checkTime(time, rules) {
   }
 
   let score = `correct`;
-  if (time < rules.FAST_ANSWER_TIME) {
+  if (time < Rule.FAST_ANSWER_TIME) {
     score = `fast`;
-  } else if (time > rules.SLOW_ANSWER_TIME) {
+  } else if (time > Rule.SLOW_ANSWER_TIME) {
     score = `slow`;
   }
   return score;
@@ -71,26 +73,26 @@ export function changeLevel(levelIndex) {
   return ++levelIndex;
 }
 
-export function checkResults(game, rules) {
+export function checkResults(game) {
   const result = {};
   const {fast = 0, slow = 0, wrong = 0} = getArrayUniqueElementsCount(game.answerResults);
   const correctCount = game.answerResults.length - wrong;
 
   result.lives = {
     count: game.lives.count,
-    points: game.lives.count * rules.PER_LIVE_AWARD,
+    points: game.lives.count * Rule.PER_LIVE_AWARD,
   };
   result.correct = {
     count: correctCount,
-    points: correctCount * rules.CORRECT_ANSWER_AWARD,
+    points: correctCount * Rule.CORRECT_ANSWER_AWARD,
   };
   result.fast = {
     count: fast,
-    points: fast * rules.FAST_ANSWER_AWARD,
+    points: fast * Rule.FAST_ANSWER_AWARD,
   };
   result.slow = {
     count: slow,
-    points: slow * -rules.SLOW_ANSWER_PENALTY,
+    points: slow * -Rule.SLOW_ANSWER_PENALTY,
   };
   result.totalPoints = result.correct.points + result.lives.points
     + result.fast.points + result.slow.points;

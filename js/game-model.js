@@ -1,4 +1,4 @@
-import {Rule} from './constants';
+import {Rule} from './settings';
 import getLevels from './mockup-data';
 import {checkAnswer, checkLives, changeLevel, checkResults, tick, resetTimer} from './logic';
 
@@ -7,7 +7,6 @@ export default class GameModel {
   constructor() {
     this._data = {
       levels: getLevels(),
-      rules: Rule,
       games: [],
     };
   }
@@ -25,10 +24,6 @@ export default class GameModel {
       slow: {count: null, points: null},
       totalPoints: null,
     });
-  }
-
-  get rules() {
-    return this._data.rules;
   }
 
   get level() {
@@ -63,7 +58,7 @@ export default class GameModel {
   checkAnswer(userAnswer) {
     this.game.lastAnswer = userAnswer;
     const newAnswerResults = this.game.answerResults.slice();
-    const checkResult = checkAnswer(userAnswer, this.level, this.game.time, this.rules);
+    const checkResult = checkAnswer(userAnswer, this.level, this.game.time);
     newAnswerResults.push(checkResult);
 
     this.game.answerResults = newAnswerResults;
@@ -76,7 +71,7 @@ export default class GameModel {
   }
 
   checkResults() {
-    const result = checkResults(this.game, this.rules);
+    const result = checkResults(this.game);
     this.game = Object.assign(this.game, result);
   }
 

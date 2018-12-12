@@ -5,8 +5,7 @@ export default class StatsTemplate extends AbstractView {
     super();
     this._results = ``;
     for (let i = 0; i < levelsAmount; i++) {
-      const status = answerResults[i] ? answerResults[i] : `unknown`;
-      this._results += `<li class="stats__result stats__result--${status}"></li>`;
+      this._results += `<li class="stats__result stats__result--${answerResults[i] || `unknown`}"></li>`;
     }
   }
 

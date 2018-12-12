@@ -1,9 +1,9 @@
 import AbstractView from './abstract-view';
 
 export default class BarView extends AbstractView {
-  constructor(livesAmount) {
+  constructor(time, livesAmount) {
     super();
-    this._time = 15;
+    this._time = time;
     this._livesAmount = livesAmount;
   }
 

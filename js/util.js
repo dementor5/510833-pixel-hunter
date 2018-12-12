@@ -6,12 +6,7 @@ export function render(template = ``) {
   return wrapper.firstChild;
 }
 
-export function replaceScreenElements(...elements) {
-  if (mainEl.children.length) {
-    mainEl.innerHTML = ``;
-  }
-
-  const fragment = document.createDocumentFragment();
-  elements.forEach((element) => fragment.appendChild(element));
-  mainEl.appendChild(fragment);
+export function changeScreen(element) {
+  mainEl.innerHTML = ``;
+  mainEl.appendChild(element);
 }

@@ -1,23 +1,31 @@
-import {replaceScreenElements} from '../util';
-import renderHeader from './header-controller';
+import HeaderController from './header-controller';
 import RulesView from '../views/rules-view';
-import {startGame} from './data-controller';
+import Application from '../application';
 
-export default () => {
-  const header = renderHeader();
-  const rulesView = new RulesView();
+export default class RulesController {
 
-  let userName = ``;
+  constructor() {
+    const headerController = new HeaderController();
+    const rulesView = new RulesView();
 
-  rulesView.onInput = (field, submitButton) => {
-    userName = field.value;
-    let isEmpty = userName.length === 0;
-    submitButton.disabled = isEmpty;
-  };
+    let userName = ``;
 
-  rulesView.onSubmit = () => {
-    startGame(userName);
-  };
+    rulesView.onInput = (field, submitButton) => {
+      userName = field.value;
+      let isEmpty = userName.length === 0;
+      submitButton.disabled = isEmpty;
+    };
 
-  replaceScreenElements(header, rulesView.element);
-};
+    rulesView.onSubmit = () => {
+      Application.showGame(userName);
+    };
+
+    this._root = document.createElement(`div`);
+    this._root.appendChild(headerController.element);
+    this._root.appendChild(rulesView.element);
+  }
+
+  get element() {
+    return this._root;
+  }
+}

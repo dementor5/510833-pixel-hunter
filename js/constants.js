@@ -1,4 +1,4 @@
-const Rule = {
+export const Rule = {
   INITIAL_LIVE_COUNT: 4,
   CORRECT_ANSWER_AWARD: 100,
   PER_LIVE_AWARD: 50,
@@ -8,7 +8,4 @@ const Rule = {
   SLOW_ANSWER_TIME: 20,
 };
 
-export const INITIAL_GAME = Object.freeze({
-  rules: Rule,
-  games: [],
-});
+export const ONE_SECOND = 1000;

@@ -42,7 +42,7 @@ export default class ResultSuccessView extends AbstractView {
             ${this._statsTemplate}
           </td>
           <td class="result__points">× ${this._rules.CORRECT_ANSWER_AWARD}</td>
-          <td class="result__total">${this._game.correctAnswerPoints}</td>
+          <td class="result__total">${this._game.correct.points}</td>
         </tr>
         ${this._speedTemplate}
         ${this._livesTemplate}

@@ -1,5 +1,6 @@
 import {assert} from 'chai';
 import {
+  checkAnswer,
   checkTwoOfTwo,
   checkOneOfTwo,
   checkOneOfThree,
@@ -10,10 +11,70 @@ import {
   checkLives,
   checkResults,
   getArrayUniqueElementsCount,
+  tick,
+  resetTimer,
 } from '../logic.js';
 
 
 describe(`logic.test.js`, () => {
+
+  describe(`checkAnswer()`, () => {
+    const Rule = {
+      FAST_ANSWER_TIME: 10,
+      SLOW_ANSWER_TIME: 20,
+    };
+
+    it(`tinder-like should return wrong on wrong answer`, () => {
+      const userAnswer = {question1: `photo`};
+      const level = {
+        type: `tinder-like`,
+        answers: [{
+          type: `painting`
+        }],
+      };
+      const time = 15;
+      assert.equal(checkAnswer(userAnswer, level, time, Rule), `wrong`);
+    });
+
+    it(`tinder-like should return correct on correct answer`, () => {
+      const userAnswer = {question1: `painting`};
+      const level = {
+        type: `tinder-like`,
+        answers: [{
+          type: `painting`
+        }],
+      };
+      const time = 15;
+      assert.equal(checkAnswer(userAnswer, level, time, Rule), `correct`);
+    });
+
+    it(`tinder-like should return slow on correct slow answer`, () => {
+      const userAnswer = {question1: `painting`};
+      const level = {
+        type: `tinder-like`,
+        answers: [{
+          type: `painting`
+        }],
+      };
+      const time = 25;
+      assert.equal(checkAnswer(userAnswer, level, time, Rule), `slow`);
+    });
+
+    it(`tinder-like should return fast on correct fast answer`, () => {
+      const userAnswer = {question1: `painting`};
+      const level = {
+        type: `tinder-like`,
+        answers: [{
+          type: `painting`
+        }],
+      };
+      const time = 5;
+      assert.equal(checkAnswer(userAnswer, level, time, Rule), `fast`);
+    });
+
+  });
+
+
   describe(`checktwoOfTwo()`, () => {
     it(`shold return true if first answer and second correct`, () => {
       const correctAnswers = [
@@ -151,44 +212,27 @@ describe(`logic.test.js`, () => {
 
 
   describe(`checkLives()`, () => {
-    it(`should reduce live count by one, if last answer id wrong`, () => {
-      const game = {
-        lives: {count: 3},
-        answerResults: [`correct`, `wrong`],
-      };
-      const newGame = {
-        lives: {count: 2},
-        answerResults: [`correct`, `wrong`],
-      };
-      assert.deepEqual(checkLives(game), newGame);
+    it(`should reduce live count by one, if last answer is wrong`, () => {
+      const answerResult = `wrong`;
+      const livesCount = 4;
+      const newLivesCount = 3;
+      assert.equal(checkLives(answerResult, livesCount), newLivesCount);
     });
 
     it(`should not change live count, if last answer is not wrong`, () => {
-      const game = {
-        lives: {count: 3},
-        answerResults: [`wrong`, `correct`],
-      };
-      const newGame = {
-        lives: {count: 3},
-        answerResults: [`wrong`, `correct`],
-      };
-      assert.deepEqual(checkLives(game), newGame);
+      const answerResult = `correct`;
+      const livesCount = 4;
+      const newLivesCount = 4;
+      assert.equal(checkLives(answerResult, livesCount), newLivesCount);
     });
   });
 
 
   describe(`changeLevel()`, () => {
-    it(`should return same object with level property increased on one`, () => {
-      const game = {
-        currentLevelIndex: 0,
-        lives: {count: 4}
-      };
-      const levels = [{}, {}, {}];
-      const newGame = {
-        currentLevelIndex: 1,
-        lives: {count: 4},
-      };
-      assert.deepEqual(changeLevel(game, levels), newGame);
+    it(`should return level index, increased by one`, () => {
+      const levelIndex = 0;
+      const newLevelIndex = 1;
+      assert.deepEqual(changeLevel(levelIndex), newLevelIndex);
     });
   });
 
@@ -218,20 +262,7 @@ describe(`logic.test.js`, () => {
       };
       const gameResult = {
         lives: {count: 4, points: 200},
-        answerResults: [
-          `fast`,
-          `fast`,
-          `slow`,
-          `wrong`,
-          `correct`,
-          `correct`,
-          `correct`,
-          `correct`,
-          `correct`,
-          `correct`,
-        ],
-        correctAnswers: 9,
-        correctAnswerPoints: 900,
+        correct: {count: 9, points: 900},
         fast: {count: 2, points: 100},
         slow: {count: 1, points: -50},
         totalPoints: 1150,
@@ -261,5 +292,21 @@ describe(`logic.test.js`, () => {
       assert.deepEqual(getArrayUniqueElementsCount(array), uniqueElementsCount);
     });
   });
+
+  describe(`tick()`, () => {
+    it(`should increase time by one every run`, () => {
+      const time = 0;
+      const newTime = 1;
+      assert.equal(tick(time), newTime);
+    });
+  });
+
+
+  describe(`resetTimer()`, () => {
+    it(`should return 0`, () => {
+      assert.equal(resetTimer(), 0);
+    });
+  });
+
 });
 

@@ -1,9 +1,9 @@
 import AbstractView from './abstract-view';
 
 export default class HeaderView extends AbstractView {
-  constructor(barTemplate = ``) {
+  constructor(barTemplate) {
     super();
-    this._barTemplate = barTemplate;
+    this._barTemplate = barTemplate ? barTemplate : ``;
   }
   get template() {
     return `

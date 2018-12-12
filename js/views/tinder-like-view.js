@@ -1,6 +1,6 @@
 import AbstractView from './abstract-view';
 
-export default class OneOfTwoView extends AbstractView {
+export default class TinderLikeView extends AbstractView {
   constructor(level, statsTemplate) {
     super();
     this._level = level;
@@ -32,7 +32,7 @@ export default class OneOfTwoView extends AbstractView {
 
   bind() {
     const answerForm = this._element.querySelector(`.game__content`);
-    answerForm.addEventListener(`change`, (evt) => this.onFormChange(evt.currentTarget));
+    answerForm.addEventListener(`change`, (evt) => this.onAnswer(evt.currentTarget));
   }
 
   onFormChange() {}

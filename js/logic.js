@@ -1,38 +1,31 @@
-export function checkAnswers(game, levels, rules) {
-  const newGame = Object.assign({}, game);
-
-  const level = levels[newGame.currentLevelIndex];
-  const correctAnswers = level.answers;
-  const userAnswers = newGame.currentLevelAnswers;
-  const time = userAnswers.time;
-
-  let correct;
+export function checkAnswer(userAnswer, level, time, rules) {
+  let result;
   switch (level.type) {
     case `two-of-two`:
-      correct = checkTwoOfTwo(correctAnswers, userAnswers);
+      result = checkTwoOfTwo(level.answers, userAnswer);
       break;
     case `tinder-like`:
-      correct = checkOneOfTwo(correctAnswers, userAnswers);
+      result = checkOneOfTwo(level.answers, userAnswer);
       break;
     case `one-of-three`:
-      correct = checkOneOfThree(correctAnswers, userAnswers);
+      result = checkOneOfThree(level.answers, userAnswer);
   }
-  newGame.answerResults.push(correct ? checkTime(time, rules) : `wrong`);
-  return newGame;
+
+  return result ? checkTime(time, rules) : `wrong`;
 }
 
-export function checkTwoOfTwo(correctAnswers, userAnswers) {
-  return correctAnswers[0].type === userAnswers.question1
-    && correctAnswers[1].type === userAnswers.question2;
+export function checkTwoOfTwo(correctAnswers, answer) {
+  return correctAnswers[0].type === answer.question1
+    && correctAnswers[1].type === answer.question2;
 }
 
-export function checkOneOfTwo(correctAnswers, userAnswers) {
-  return correctAnswers[0].type === userAnswers.question1;
+export function checkOneOfTwo(correctAnswers, answer) {
+  return correctAnswers[0].type === answer.question1;
 }
 
-export function checkOneOfThree(correctAnswers, userAnswers) {
+export function checkOneOfThree(correctAnswers, answer) {
   const correctAnswer = getCorrectAnswer(correctAnswers);
-  return correctAnswer.index === userAnswers.question1;
+  return correctAnswer.index === answer.question1;
 }
 
 export function getCorrectAnswer(answers) {
@@ -70,36 +63,27 @@ export function checkTime(time, rules) {
   return score;
 }
 
-export function checkLives(game) {
-  const lastIndex = game.answerResults.length - 1;
-  const lastAnswerStatus = game.answerResults[lastIndex];
-  if (lastAnswerStatus === `wrong`) {
-    const newGame = Object.assign({}, game);
-    newGame.lives.count--;
-    return newGame;
-  } else {
-    return game;
-  }
+export function checkLives(answerResult, livesCount) {
+  return answerResult === `wrong` ? --livesCount : livesCount;
 }
 
-export function changeLevel(game, levels) {
-  const lastLevelIndex = levels.length - 1;
-  if (game.lives.count === 0) {
-    throw new Error(`you are dead`);
-  } else if (game.currentLevelIndex === lastLevelIndex) {
-    throw new Error(`allready last level`);
-  }
-  const newGame = Object.assign({}, game);
-  newGame.currentLevelIndex++;
-  return newGame;
+export function changeLevel(levelIndex) {
+  return ++levelIndex;
 }
 
 export function checkResults(game, rules) {
-  const result = Object.assign({}, game);
-  result.lives.points = result.lives.count * rules.PER_LIVE_AWARD;
+  const result = {};
   const {fast = 0, slow = 0, wrong = 0} = getArrayUniqueElementsCount(game.answerResults);
-  result.correctAnswers = result.answerResults.length - wrong;
-  result.correctAnswerPoints = result.correctAnswers * rules.CORRECT_ANSWER_AWARD;
+  const correctCount = game.answerResults.length - wrong;
+
+  result.lives = {
+    count: game.lives.count,
+    points: game.lives.count * rules.PER_LIVE_AWARD,
+  };
+  result.correct = {
+    count: correctCount,
+    points: correctCount * rules.CORRECT_ANSWER_AWARD,
+  };
   result.fast = {
     count: fast,
     points: fast * rules.FAST_ANSWER_AWARD,
@@ -108,10 +92,9 @@ export function checkResults(game, rules) {
     count: slow,
     points: slow * -rules.SLOW_ANSWER_PENALTY,
   };
-  result.totalPoints = result.correctAnswerPoints
-    + result.lives.points
-    + result.fast.points
-    + result.slow.points;
+  result.totalPoints = result.correct.points + result.lives.points
+    + result.fast.points + result.slow.points;
+
   return result;
 }
 
@@ -120,4 +103,12 @@ export function getArrayUniqueElementsCount(array) {
     acc[it] = (acc[it] || 0) + 1;
     return acc;
   }, {});
+}
+
+export function tick(time) {
+  return ++time;
+}
+
+export function resetTimer() {
+  return 0;
 }

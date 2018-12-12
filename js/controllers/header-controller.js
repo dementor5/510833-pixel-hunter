@@ -1,8 +1,16 @@
 import HeaderView from '../views/header-view.js';
-import {greeting} from './data-controller';
+import Application from '../application';
 
-export default (barTemplate = ``) => {
-  const headerView = new HeaderView(barTemplate);
-  headerView.onClick = greeting;
-  return headerView.element;
-};
+export default class HeaderController {
+
+  constructor(barTemplate) {
+    const headerView = new HeaderView(barTemplate);
+    headerView.onClick = Application.showGreeting;
+    this._element = headerView.element;
+  }
+
+  get element() {
+    return this._element;
+  }
+
+}

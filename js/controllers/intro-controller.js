@@ -1,9 +1,15 @@
 import IntroView from '../views/intro-view';
-import {greeting} from './data-controller';
-import {replaceScreenElements} from '../util';
+import Application from '../application';
 
-export default () => {
-  const introView = new IntroView();
-  introView.onClick = greeting;
-  replaceScreenElements(introView.element);
-};
+export default class IntroController {
+  constructor() {
+    const introView = new IntroView();
+    introView.onClick = Application.showGreeting;
+    this._element = introView.element;
+  }
+
+  get element() {
+    return this._element;
+  }
+
+}

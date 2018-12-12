@@ -1,9 +1,16 @@
 import GreetingView from '../views/greeting-view';
-import {rules} from './data-controller';
-import {replaceScreenElements} from '../util';
+import Application from '../application';
 
-export default () => {
-  const greetingView = new GreetingView();
-  greetingView.onClick = rules;
-  replaceScreenElements(greetingView.element);
-};
+export default class GreetingController {
+
+  constructor() {
+    const greetingView = new GreetingView();
+    greetingView.onClick = Application.showRules;
+    this._element = greetingView.element;
+  }
+
+  get element() {
+    return this._element;
+  }
+
+}

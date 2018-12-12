@@ -1,2 +1,4 @@
-import {intro} from './controllers/data-controller';
-intro();
+import Application from './application';
+// Application.showIntro();
+Application.showGame(`Petr`);
+

@@ -1,28 +1,35 @@
 import AbstractView from '../abstract-view';
+import {DEBUG, Type2Hint} from '../settings';
 
 export default class OneOfThreeView extends AbstractView {
   constructor(level, statsTemplate) {
     super();
-    this._level = level;
-    this._first = level.answers[0].image;
-    this._second = level.answers[1].image;
-    this._third = level.answers[2].image;
+    this._question = level.question;
+    this._first = level.answers[0];
+    this._second = level.answers[1];
+    this._third = level.answers[2];
+    this._firstHint = DEBUG ? Type2Hint[this._first.type] : ``;
+    this._secondHint = DEBUG ? Type2Hint[this._second.type] : ``;
+    this._thirdHint = DEBUG ? Type2Hint[this._third.type] : ``;
     this._statsTemplate = statsTemplate;
   }
 
   get template() {
     return `
       <section class="game">
-        <p class="game__task">${this._level.question}</p>
+        <p class="game__task">${this._question}</p>
         <form class="game__content  game__content--triple">
           <div class="game__option">
-            <img src="${this._first.url}" alt="Option 1" width="${this._first.width}" height="${this._first.height}">
+            <img src="${this._first.image.url}" alt="Option 1" width="${this._first.image.width}" height="${this._first.image.height}">
+            ${this._getHintTemplate(this._firstHint)}
           </div>
           <div class="game__option  game__option--selected">
-            <img src="${this._second.url}" alt="Option 2" width="${this._second.width}" height="${this._second.height}">
+            <img src="${this._second.image.url}" alt="Option 2" width="${this._second.image.width}" height="${this._second.image.height}">
+            ${this._getHintTemplate(this._secondHint)}
           </div>
           <div class="game__option">
-            <img src="${this._third.url}" alt="Option 3" width="${this._third.width}" height="${this._third.height}">
+            <img src="${this._third.image.url}" alt="Option 3" width="${this._third.image.width}" height="${this._third.image.height}">
+            ${this._getHintTemplate(this._thirdHint)}
           </div>
         </form>
         ${this._statsTemplate}
@@ -35,4 +42,9 @@ export default class OneOfThreeView extends AbstractView {
   }
 
   onClick() {}
+
+  _getHintTemplate(value) {
+    return value ? `<div style="font-size: 22px; position: relative; bottom: 112%;">${value}</div>` : ``;
+  }
+
 }

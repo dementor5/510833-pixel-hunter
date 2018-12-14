@@ -1,19 +1,61 @@
 import {Rule} from './settings';
 
-export function checkAnswer(userAnswer, level, time) {
-  let result;
-  switch (level.type) {
-    case `two-of-two`:
-      result = checkTwoOfTwo(level.answers, userAnswer);
-      break;
-    case `tinder-like`:
-      result = checkOneOfTwo(level.answers, userAnswer);
-      break;
-    case `one-of-three`:
-      result = checkOneOfThree(level.answers, userAnswer);
+export function tick(time) {
+  return ++time;
+}
+
+export function resetTimer() {
+  return 0;
+}
+
+export function checkTime(time) {
+  if (typeof time !== `number`) {
+    throw new Error(`time should be of type number`);
+  }
+  if (time < 0) {
+    throw new Error(`time should not be negative value`);
   }
 
-  return result ? checkTime(time) : `wrong`;
+  const startWarningAnimationTime = Rule.TIMEOUT_ANSWER_TIME - Rule.WARNING_ANSWER_TIME;
+
+  let estimate = `fast`;
+  if (time >= Rule.FAST_ANSWER_TIME && time <= Rule.SLOW_ANSWER_TIME) {
+    estimate = `correct`;
+  } else if (time > Rule.SLOW_ANSWER_TIME && time <= startWarningAnimationTime) {
+    estimate = `slow`;
+  } else if (time > startWarningAnimationTime && time <= Rule.TIMEOUT_ANSWER_TIME) {
+    estimate = `warning`;
+  } else if (time > Rule.TIMEOUT_ANSWER_TIME) {
+    estimate = false;
+  }
+  return estimate;
+}
+
+export function checkAnswer(userAnswer, level, timeEstimate) {
+  let result = `wrong`;
+  if (!userAnswer) {
+    return result;
+  }
+  if (timeEstimate === `warning`) {
+    timeEstimate = `slow`;
+  }
+  const checkFunction = getCheckFunction(level.type);
+  return checkFunction(level.answers, userAnswer) ? timeEstimate : result;
+}
+
+function getCheckFunction(levelType) {
+  let checkFunction = {};
+  switch (levelType) {
+    case `two-of-two`:
+      checkFunction = checkTwoOfTwo;
+      break;
+    case `tinder-like`:
+      checkFunction = checkOneOfTwo;
+      break;
+    case `one-of-three`:
+      checkFunction = checkOneOfThree;
+  }
+  return checkFunction;
 }
 
 export function checkTwoOfTwo(correctAnswers, answer) {
@@ -46,23 +88,6 @@ export function getUniqueArrayElement(array) {
     }
   }
   return element;
-}
-
-export function checkTime(time) {
-  if (typeof time !== `number`) {
-    throw new Error(`time should be of type number`);
-  }
-  if (time < 0) {
-    throw new Error(`time should not be negative value`);
-  }
-
-  let score = `correct`;
-  if (time < Rule.FAST_ANSWER_TIME) {
-    score = `fast`;
-  } else if (time > Rule.SLOW_ANSWER_TIME) {
-    score = `slow`;
-  }
-  return score;
 }
 
 export function checkLives(answerResult, livesCount) {
@@ -105,12 +130,4 @@ export function getArrayUniqueElementsCount(array) {
     acc[it] = (acc[it] || 0) + 1;
     return acc;
   }, {});
-}
-
-export function tick(time) {
-  return ++time;
-}
-
-export function resetTimer() {
-  return 0;
 }

@@ -1,18 +1,20 @@
 import AbstractView from '../abstract-view';
+import {DEBUG, Type2Hint} from '../settings';
 
 export default class TinderLikeView extends AbstractView {
   constructor(level, statsTemplate) {
     super();
-    this._level = level;
-    this._image = level.answers[0].image;
+    this._question = level.question;
+    const first = level.answers[0];
+    this._hint = DEBUG ? Type2Hint[first.type] : ``;
+    this._image = first.image;
     this._statsTemplate = statsTemplate;
-
   }
 
   get template() {
     return `
       <section class="game">
-        <p class="game__task">${this._level.question}</p>
+        <p class="game__task">${this._question}${this._hint}</p>
         <form class="game__content  game__content--wide">
           <div class="game__option">
             <img src="${this._image.url}" alt="Option 1" width="${this._image.width}" height="${this._image.height}">

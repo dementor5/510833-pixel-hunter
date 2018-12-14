@@ -26,6 +26,20 @@ export default class GameController {
     this._startTimer();
   }
 
+  _startTimer() {
+    this._timer = setTimeout(() => {
+      this._startTimer();
+      this._model.tick();
+      if (!this._model.checkTime()) {
+        this._continueGame();
+      }
+      this._header.timerValue = this._model.game.time;
+      if (this._model.game.timeEstimate === `warning`) {
+        this._header.blinkTimer();
+      }
+    }, ONE_SECOND);
+  }
+
   _continueGame(userAnswer) {
     this._stopTimer();
     const model = this._model;
@@ -42,23 +56,15 @@ export default class GameController {
     }
   }
 
+  _stopTimer() {
+    clearTimeout(this._timer);
+  }
+
   _updateContent() {
     this._updateHeader();
     const newContent = this._newContent;
     this._root.replaceChild(newContent.element, this._content.element);
     this._content = newContent;
-  }
-
-  _startTimer() {
-    this._timer = setTimeout(() => {
-      this._model.tick();
-      this._updateHeader();
-      this._startTimer();
-    }, ONE_SECOND);
-  }
-
-  _stopTimer() {
-    clearTimeout(this._timer);
   }
 
   _updateHeader() {

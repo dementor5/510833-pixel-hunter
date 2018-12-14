@@ -1,4 +1,5 @@
 import AbstractView from '../abstract-view';
+import {BLINK_SHOW_TIMER_DELAY} from '../settings';
 
 export default class HeaderView extends AbstractView {
   constructor(barTemplate) {
@@ -24,6 +25,22 @@ export default class HeaderView extends AbstractView {
   bind() {
     const backButton = this._element.querySelector(`.back`);
     backButton.addEventListener(`click`, this.onClick);
+    this._timer = this.element.querySelector(`.game__timer`);
+  }
+
+  set timerValue(time) {
+    if (this._timer) {
+      this._timer.firstChild.textContent = time;
+    }
+  }
+
+  blinkTimer() {
+    if (this._timer) {
+      this._timer.style.opacity = 0;
+      setTimeout(() => {
+        this._timer.style.opacity = 1;
+      }, BLINK_SHOW_TIMER_DELAY);
+    }
   }
 
   onClick() {}

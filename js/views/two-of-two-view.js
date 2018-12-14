@@ -1,11 +1,14 @@
 import AbstractView from '../abstract-view';
+import {DEBUG, Type2Hint} from '../settings';
 
 export default class TwoOfTwoView extends AbstractView {
   constructor(level, statsTemplate) {
     super();
     this._level = level;
-    this._first = level.answers[0].image;
-    this._second = level.answers[1].image;
+    this._first = level.answers[0];
+    this._second = level.answers[1];
+    this._firstHint = DEBUG ? Type2Hint[this._first.type] : ``;
+    this._secondHint = DEBUG ? Type2Hint[this._second.type] : ``;
     this._statsTemplate = statsTemplate;
   }
 
@@ -15,7 +18,8 @@ export default class TwoOfTwoView extends AbstractView {
         <p class="game__task">${this._level.question}</p>
         <form class="game__content">
           <div class="game__option">
-            <img src="${this._first.url}" alt="Option 1" width="${this._first.width}" height="${this._first.height}">
+            <img src="${this._first.image.url}" alt="Option 1" width="${this._first.image.width}" height="${this._first.image.height}">
+            ${this._getHintTemplate(this._firstHint)}
             <label class="game__answer game__answer--photo">
               <input class="visually-hidden" name="question1" type="radio" value="photo">
               <span>Фото</span>
@@ -26,7 +30,8 @@ export default class TwoOfTwoView extends AbstractView {
             </label>
           </div>
           <div class="game__option">
-            <img src="${this._second.url}" alt="Option 2" width="${this._second.width}" height="${this._second.height}">
+            <img src="${this._second.image.url}" alt="Option 2" width="${this._second.image.width}" height="${this._second.image.height}">
+            ${this._getHintTemplate(this._secondHint)}
             <label class="game__answer  game__answer--photo">
               <input class="visually-hidden" name="question2" type="radio" value="photo">
               <span>Фото</span>
@@ -47,4 +52,8 @@ export default class TwoOfTwoView extends AbstractView {
   }
 
   onFormChange() {}
+
+  _getHintTemplate(value) {
+    return value ? `<div style="font-size: 22px; position: relative; bottom: 112%;">${value}</div>` : ``;
+  }
 }

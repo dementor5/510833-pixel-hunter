@@ -1,4 +1,5 @@
 import GameModel from './game-model';
+import Loader from './loader';
 import IntroController from './controllers/intro-controller';
 import GreetingController from './controllers/greeting-controller';
 import RulesController from './controllers/rules-controller';
@@ -6,9 +7,16 @@ import GameController from './controllers/game-controller';
 import ResultController from './controllers/result-controller';
 import {changeScreen} from './util';
 
-const gameModel = new GameModel();
+let gameModel = {};
 
 export default class Application {
+
+  static start() {
+    Loader.loadData().then((data) => {
+      gameModel = new GameModel(data);
+    })
+    .then(Application.showIntro);
+  }
 
   static showIntro() {
     const introController = new IntroController();
@@ -27,7 +35,7 @@ export default class Application {
   }
 
   static showGame(userName) {
-    gameModel.restart(userName);
+    gameModel.startNewGame(userName);
     const gameController = new GameController(gameModel);
     changeScreen(gameController.element);
     gameController.startGame();

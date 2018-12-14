@@ -1,22 +1,22 @@
 import {Rule} from './settings';
-import getLevels from './mockup-data';
-import {checkAnswer, checkLives, changeLevel, checkResults, tick, resetTimer} from './logic';
+import {checkTime, checkAnswer, checkLives, changeLevel, checkResults, tick, resetTimer, timeIsUp} from './logic';
 
 export default class GameModel {
 
-  constructor() {
+  constructor(data) {
     this._data = {
-      levels: getLevels(),
+      levels: data,
       games: [],
     };
   }
 
-  restart(userName) {
+  startNewGame(userName) {
     this._data.games.unshift({
       userName,
       levelIndex: 0,
       lastAnswer: {},
       time: 0,
+      timeEstimate: ``,
       answerResults: [],
       lives: {count: Rule.INITIAL_LIVE_COUNT, points: null},
       correct: {count: null, points: null},
@@ -55,10 +55,23 @@ export default class GameModel {
     this.games[0] = game;
   }
 
+  tick() {
+    this.game.time = tick(this.game.time);
+  }
+
+  resetTimer() {
+    this.game.time = resetTimer();
+  }
+
+  checkTime() {
+    this.game.timeEstimate = checkTime(this.game.time);
+    return this.game.timeEstimate;
+  }
+
   checkAnswer(userAnswer) {
     this.game.lastAnswer = userAnswer;
     const newAnswerResults = this.game.answerResults.slice();
-    const checkResult = checkAnswer(userAnswer, this.level, this.game.time);
+    const checkResult = checkAnswer(userAnswer, this.level, this.game.timeEstimate);
     newAnswerResults.push(checkResult);
 
     this.game.answerResults = newAnswerResults;
@@ -74,13 +87,4 @@ export default class GameModel {
     const result = checkResults(this.game);
     this.game = Object.assign(this.game, result);
   }
-
-  tick() {
-    this.game.time = tick(this.game.time);
-  }
-
-  resetTimer() {
-    this.game.time = resetTimer();
-  }
-
 }

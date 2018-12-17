@@ -11,5 +11,5 @@ export const Rule = {
 };
 export const APP_ID = 68466762;
 export const SERVER_URL = `https://es.dump.academy/pixel-hunter`;
-export const DEBUG = true;
+export const DEBUG = false;
 export const Type2Hint = {painting: ` (рисунок)`, photo: ` (фото)`};

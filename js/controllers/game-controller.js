@@ -49,7 +49,7 @@ export default class GameController {
       if (!this._model.checkTime()) {
         this._continueGame();
       }
-      this._header.timerValue = this._model.game.time;
+      this._header.timerValue = this._model.reminedTime;
       if (this._model.game.timeEstimate === `warning`) {
         this._header.blinkTimer();
       }
@@ -74,8 +74,7 @@ export default class GameController {
   }
 
   get _newHeader() {
-    const game = this._model.game;
-    const barView = new BarView(game.time, game.livesCount);
+    const barView = new BarView(this._model.reminedTime, this._model.game.livesCount);
     const header = new HeaderController(barView.template);
     return header;
   }

@@ -59,6 +59,10 @@ export default class GameModel {
     return this._data.scores;
   }
 
+  get reminedTime() {
+    return Rule.TIMEOUT_ANSWER_TIME - this.game.time;
+  }
+
   set game(game) {
     this.game = game;
   }

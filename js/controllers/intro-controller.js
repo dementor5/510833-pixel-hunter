@@ -2,6 +2,7 @@ import IntroView from '../views/intro-view';
 import Application from '../application';
 
 export default class IntroController {
+
   constructor() {
     const introView = new IntroView();
     introView.onClick = Application.showGreeting;

@@ -9,9 +9,7 @@ export const Rule = {
   TIMEOUT_ANSWER_TIME: 30,
   WARNING_ANSWER_TIME: 5,
 };
-
-export const ONE_SECOND = 1000;
-export const BLINK_SHOW_TIMER_DELAY = 200;
-export const DEBUG = false;
+export const APP_ID = 68466762;
+export const SERVER_URL = `https://es.dump.academy/pixel-hunter`;
+export const DEBUG = true;
 export const Type2Hint = {painting: ` (рисунок)`, photo: ` (фото)`};
-export const SERVER_URL = `https://es.dump.academy/pixel-hunter/questions`;

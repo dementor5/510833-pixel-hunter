@@ -1,19 +1,24 @@
 import TinderLikeView from '../views/tinder-like-view';
 
-export default (level, statsTemplate, continueGame) => {
-  const oneOfTwoView = new TinderLikeView(level, statsTemplate);
+export default class TinderLikeController {
 
-  oneOfTwoView.onAnswer = (form) => {
-    const formData = new FormData(form);
+  constructor(level, statsTemplate, continueGame) {
+    const oneOfTwoView = new TinderLikeView(level, statsTemplate);
 
-    if (!formData.has(`question1`)) {
-      return;
-    }
+    oneOfTwoView.onAnswer = (form) => {
+      const formData = new FormData(form);
+      if (!formData.has(`question1`)) {
+        return;
+      }
+      const answer = {question1: formData.get(`question1`)};
+      continueGame(answer);
+    };
 
-    const answer = {question1: formData.get(`question1`)};
+    this._element = oneOfTwoView.element;
+  }
 
-    continueGame(answer);
-  };
+  get element() {
+    return this._element;
+  }
 
-  return oneOfTwoView;
-};
+}

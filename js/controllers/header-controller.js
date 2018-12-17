@@ -5,7 +5,7 @@ export default class HeaderController {
 
   constructor(barTemplate) {
     this._headerView = new HeaderView(barTemplate);
-    this._headerView.onClick = Application.showGreeting;
+    this._headerView.onClick = Application.showModalConfirm;
     this._element = this._headerView.element;
   }
 

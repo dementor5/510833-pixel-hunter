@@ -9,7 +9,7 @@ import {
   checkTime,
   changeLevel,
   checkLives,
-  checkResults,
+  adaptScore,
   getArrayUniqueElementsCount,
   tick,
   resetTimer,
@@ -252,9 +252,26 @@ describe(`logic.test.js`, () => {
 
 
   describe(`checkResutls()`, () => {
-    it(`should`, () => {
-      const game = {
-        lives: {count: 4},
+    it(`should return full calculated score if lives > 0`, () => {
+      const answerResults = [
+        `fast`,
+        `fast`,
+        `slow`,
+        `wrong`,
+        `correct`,
+        `correct`,
+        `correct`,
+        `correct`,
+        `correct`,
+        `correct`,
+      ];
+      const livesCount = 4;
+      const score = {
+        lives: {count: 4, points: 200},
+        correct: {count: 9, points: 900},
+        fast: {count: 2, points: 100},
+        slow: {count: 1, points: -50},
+        totalPoints: 1150,
         answerResults: [
           `fast`,
           `fast`,
@@ -268,14 +285,38 @@ describe(`logic.test.js`, () => {
           `correct`,
         ],
       };
-      const gameResult = {
-        lives: {count: 4, points: 200},
-        correct: {count: 9, points: 900},
-        fast: {count: 2, points: 100},
-        slow: {count: 1, points: -50},
-        totalPoints: 1150,
+      assert.deepEqual(adaptScore(answerResults, livesCount), score);
+    });
+    it(`should return short score if lives = 0`, () => {
+      const answerResults = [
+        `fast`,
+        `fast`,
+        `slow`,
+        `wrong`,
+        `correct`,
+        `correct`,
+        `correct`,
+        `correct`,
+        `correct`,
+        `correct`,
+      ];
+      const livesCount = 0;
+      const shortScore = {
+        lives: {count: 0},
+        answerResults: [
+          `fast`,
+          `fast`,
+          `slow`,
+          `wrong`,
+          `correct`,
+          `correct`,
+          `correct`,
+          `correct`,
+          `correct`,
+          `correct`,
+        ],
       };
-      assert.deepEqual(checkResults(game), gameResult);
+      assert.deepEqual(adaptScore(answerResults, livesCount), shortScore);
     });
   });
 

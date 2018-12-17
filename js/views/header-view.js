@@ -1,5 +1,6 @@
 import AbstractView from '../abstract-view';
-import {BLINK_SHOW_TIMER_DELAY} from '../settings';
+
+const BLINK_SHOW_TIMER_DELAY = 200;
 
 export default class HeaderView extends AbstractView {
   constructor(barTemplate) {

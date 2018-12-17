@@ -1,9 +1,9 @@
 import AbstractView from '../abstract-view';
 
 export default class ResultView extends AbstractView {
-  constructor(lastResultLivesAmount, results) {
+  constructor(currentGameIsWin, results) {
     super();
-    this._lastResultTitle = lastResultLivesAmount ? `Победа!` : `Поражение!`;
+    this._lastResultTitle = currentGameIsWin ? `Победа!` : `Поражение!`;
     this._results = results;
   }
 

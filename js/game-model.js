@@ -1,29 +1,26 @@
 import {Rule} from './settings';
-import {checkTime, checkAnswer, checkLives, changeLevel, checkResults, tick, resetTimer, timeIsUp} from './logic';
+import {tick, resetTimer, checkTime, checkAnswer, checkLives, changeLevel, adaptScore} from './logic';
 
 export default class GameModel {
 
-  constructor(data) {
+  constructor(levels = []) {
     this._data = {
-      levels: data,
-      games: [],
+      levels,
+      game: {},
+      scores: [],
     };
   }
 
   startNewGame(userName) {
-    this._data.games.unshift({
+    this._data.game = {
       userName,
+      livesCount: Rule.INITIAL_LIVE_COUNT,
       levelIndex: 0,
-      lastAnswer: {},
       time: 0,
+      lastAnswer: {},
       timeEstimate: ``,
-      answerResults: [],
-      lives: {count: Rule.INITIAL_LIVE_COUNT, points: null},
-      correct: {count: null, points: null},
-      fast: {count: null, points: null},
-      slow: {count: null, points: null},
-      totalPoints: null,
-    });
+      answerResults: new Array(this.levels.length).fill(`unknown`),
+    };
   }
 
   get level() {
@@ -40,19 +37,30 @@ export default class GameModel {
   }
 
   get canContinue() {
-    return this.game.lives.count > 0 && this.levelIsNotLast;
+    return this.game.livesCount > 0 && this.levelIsNotLast;
   }
 
   get game() {
-    return this.games[0];
+    return this._data.game;
   }
 
-  get games() {
-    return this._data.games;
+  get userName() {
+    return this.game.userName;
+  }
+
+  get gameResult() {
+    return {
+      livesCount: this.game.livesCount,
+      answerResults: this.game.answerResults,
+    };
+  }
+
+  get scores() {
+    return this._data.scores;
   }
 
   set game(game) {
-    this.games[0] = game;
+    this.game = game;
   }
 
   tick() {
@@ -72,10 +80,10 @@ export default class GameModel {
     this.game.lastAnswer = userAnswer;
     const newAnswerResults = this.game.answerResults.slice();
     const checkResult = checkAnswer(userAnswer, this.level, this.game.timeEstimate);
-    newAnswerResults.push(checkResult);
+    newAnswerResults[this.game.levelIndex] = checkResult;
 
     this.game.answerResults = newAnswerResults;
-    this.game.lives.count = checkLives(checkResult, this.game.lives.count);
+    this.game.livesCount = checkLives(checkResult, this.game.livesCount);
   }
 
   changeLevel() {
@@ -83,8 +91,10 @@ export default class GameModel {
     this.game.levelIndex = newLevelIndex;
   }
 
-  checkResults() {
-    const result = checkResults(this.game);
-    this.game = Object.assign(this.game, result);
+  adaptScores(scores) {
+    this._data.scores = scores.map((score) => {
+      return adaptScore(score.answerResults, score.livesCount);
+    });
   }
+
 }

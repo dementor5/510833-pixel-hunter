@@ -10,3 +10,7 @@ export function changeScreen(element) {
   mainEl.innerHTML = ``;
   mainEl.appendChild(element);
 }
+
+export function appendModal(element) {
+  document.body.appendChild(element);
+}

@@ -1,12 +1,11 @@
 import AbstractView from '../abstract-view';
 
 export default class StatsTemplate extends AbstractView {
-  constructor(answerResults, levelsAmount) {
+  constructor(answerResults) {
     super();
-    this._results = ``;
-    for (let i = 0; i < levelsAmount; i++) {
-      this._results += `<li class="stats__result stats__result--${answerResults[i] || `unknown`}"></li>`;
-    }
+    this._results = answerResults.map((result) => {
+      return `<li class="stats__result stats__result--${result}"></li>`;
+    }).join(``);
   }
 
   get template() {

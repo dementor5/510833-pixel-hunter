@@ -1,11 +1,12 @@
 import BarView from '../views/bar-view';
 import HeaderController from './header-controller';
 import StatsView from '../views/stats-view';
-import tinderLike from './tinder-like-controller';
-import initOneOfThree from './one-of-three-controller';
-import initTwoOfTwo from './two-of-two-controller';
-import {ONE_SECOND} from '../settings';
+import TinderLikeController from './tinder-like-controller';
+import OneOfThreeController from './one-of-three-controller';
+import TwoOfTwoController from './two-of-two-controller';
 import Application from '../application';
+
+const ONE_SECOND = 1000;
 
 export default class GameController {
   constructor(model) {
@@ -26,6 +27,21 @@ export default class GameController {
     this._startTimer();
   }
 
+  _continueGame(userAnswer) {
+    this._stopTimer();
+    const model = this._model;
+    model.checkAnswer(userAnswer);
+    this._model.resetTimer();
+
+    if (model.canContinue) {
+      model.changeLevel();
+      this._updateContent();
+      this._startTimer();
+    } else {
+      Application.showStats();
+    }
+  }
+
   _startTimer() {
     this._timer = setTimeout(() => {
       this._startTimer();
@@ -38,22 +54,6 @@ export default class GameController {
         this._header.blinkTimer();
       }
     }, ONE_SECOND);
-  }
-
-  _continueGame(userAnswer) {
-    this._stopTimer();
-    const model = this._model;
-    model.checkAnswer(userAnswer);
-    this._model.resetTimer();
-
-    if (model.canContinue) {
-      model.changeLevel();
-      this._updateContent();
-      this.startGame();
-    } else {
-      model.checkResults();
-      Application.showStats();
-    }
   }
 
   _stopTimer() {
@@ -75,37 +75,37 @@ export default class GameController {
 
   get _newHeader() {
     const game = this._model.game;
-    const barView = new BarView(game.time, game.lives.count);
+    const barView = new BarView(game.time, game.livesCount);
     const header = new HeaderController(barView.template);
     return header;
   }
 
   get _newContent() {
     const model = this._model;
-    const statsView = new StatsView(model.game.answerResults, model.levels.length);
+    const statsView = new StatsView(model.game.answerResults);
     const continueGame = this._continueGame.bind(this);
-    const content = this._createContent(model.level, statsView.template, continueGame);
+    const content = new this._AnswerController(model.level, statsView.template, continueGame);
     return content;
   }
 
-  get _createContent() {
+  get _AnswerController() {
     const type = this._model.level.type;
 
-    let createContent;
+    let AnswerController;
     switch (type) {
       case `tinder-like`:
-        createContent = tinderLike;
+        AnswerController = TinderLikeController;
         break;
       case `one-of-three`:
-        createContent = initOneOfThree;
+        AnswerController = OneOfThreeController;
         break;
       case `two-of-two`:
-        createContent = initTwoOfTwo;
+        AnswerController = TwoOfTwoController;
         break;
       default:
         throw new Error(`Unknown current level type: ${type}`);
     }
 
-    return createContent;
+    return AnswerController;
   }
 }

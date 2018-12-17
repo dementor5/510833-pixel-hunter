@@ -98,31 +98,26 @@ export function changeLevel(levelIndex) {
   return ++levelIndex;
 }
 
-export function checkResults(game) {
-  const result = {};
-  const {fast = 0, slow = 0, wrong = 0} = getArrayUniqueElementsCount(game.answerResults);
-  const correctCount = game.answerResults.length - wrong;
+export function adaptScore(answerResults, livesCount) {
+  if (!livesCount) {
+    return {answerResults, lives: {count: livesCount}};
+  }
 
-  result.lives = {
-    count: game.lives.count,
-    points: game.lives.count * Rule.PER_LIVE_AWARD,
-  };
-  result.correct = {
-    count: correctCount,
-    points: correctCount * Rule.CORRECT_ANSWER_AWARD,
-  };
-  result.fast = {
-    count: fast,
-    points: fast * Rule.FAST_ANSWER_AWARD,
-  };
-  result.slow = {
-    count: slow,
-    points: slow * -Rule.SLOW_ANSWER_PENALTY,
-  };
-  result.totalPoints = result.correct.points + result.lives.points
-    + result.fast.points + result.slow.points;
+  const {fast = 0, slow = 0, wrong = 0} = getArrayUniqueElementsCount(answerResults);
+  const livesPoints = livesCount * Rule.PER_LIVE_AWARD;
+  const correctCount = answerResults.length - wrong;
+  const correctPoints = correctCount * Rule.CORRECT_ANSWER_AWARD;
+  const fastPoints = fast * Rule.FAST_ANSWER_AWARD;
+  const slowPoints = -slow * Rule.SLOW_ANSWER_PENALTY;
 
-  return result;
+  return {
+    answerResults,
+    lives: {count: livesCount, points: livesPoints},
+    correct: {count: correctCount, points: correctPoints},
+    fast: {count: fast, points: fastPoints},
+    slow: {count: slow, points: slowPoints},
+    totalPoints: correctPoints + livesPoints + fastPoints + slowPoints,
+  };
 }
 
 export function getArrayUniqueElementsCount(array) {

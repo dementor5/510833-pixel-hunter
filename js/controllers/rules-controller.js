@@ -7,7 +7,6 @@ export default class RulesController {
   constructor() {
     const headerController = new HeaderController();
     const rulesView = new RulesView();
-
     let userName = ``;
 
     rulesView.onInput = (field, submitButton) => {
@@ -28,4 +27,5 @@ export default class RulesController {
   get element() {
     return this._root;
   }
+
 }

@@ -36,7 +36,7 @@ export default class GameController {
     if (model.canContinue) {
       model.changeLevel();
       this._updateContent();
-      this._startTimer();
+      this.startGame();
     } else {
       Application.showStats();
     }

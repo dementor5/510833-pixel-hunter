@@ -37,8 +37,10 @@ export default class OneOfThreeView extends AbstractView {
   }
 
   bind() {
-    const gameContent = this._element.querySelector(`.game__content`);
-    gameContent.addEventListener(`click`, (evt) => this.onClick(evt.target));
+    const gameOptions = this._element.querySelectorAll(`.game__option`);
+    Array.from(gameOptions).forEach((option) => {
+      option.addEventListener(`click`, (evt) => this.onClick(evt.currentTarget.firstElementChild));
+    });
   }
 
   onClick() {}

@@ -1,0 +1,30 @@
+.crossfade {
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
+
+  &--hide {
+    position: absolute;
+    z-index: 100;
+    animation-name: crossfadeHide;
+  }
+
+  &--show {
+    animation-name: crossfadeShow;
+  }
+}
+
+@keyframes crossfadeHide {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes crossfadeShow {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

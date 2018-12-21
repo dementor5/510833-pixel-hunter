@@ -1,42 +1,34 @@
 import GameModel from './game-model';
-import LoadingIndicatorView from './views/loading-indicator-view';
 import Loader from './loader';
 import ImagesLoader from './images-loader';
-import IntroController from './controllers/intro-controller';
+import IntroView from './views/intro-view';
 import GreetingController from './controllers/greeting-controller';
 import RulesController from './controllers/rules-controller';
 import GameController from './controllers/game-controller';
 import ResultController from './controllers/result-controller';
 import ModalErrorView from './views/modal-error-view';
 import ModalConfirmController from './controllers/modal-confirm-controller';
-import {changeScreen, appendModal} from './util';
+import {crossfadeChangeScreen, changeScreen, appendModal} from './util';
 
 let gameModel = [];
 
 export default class Application {
 
   static start() {
-    const loadingIndicatorView = new LoadingIndicatorView();
-    changeScreen(loadingIndicatorView.element);
+    Application.showLoadScreen();
 
     Loader.loadData()
       .then((levels) => {
         gameModel = new GameModel(levels);
       })
-      .then(() => new ImagesLoader(gameModel))
-      .then(() => loadingIndicatorView.stop())
-      .then(Application.showIntro)
+      .then(() => new ImagesLoader(gameModel).loadImages())
+      .then(Application.showGreeting)
       .catch(Application.showModalError);
-  }
-
-  static showIntro() {
-    const introController = new IntroController();
-    changeScreen(introController.element);
   }
 
   static showGreeting() {
     const greetingController = new GreetingController();
-    changeScreen(greetingController.element);
+    crossfadeChangeScreen(greetingController.element);
   }
 
   static showRules() {
@@ -53,24 +45,28 @@ export default class Application {
   }
 
   static showStats() {
-    const resultController = new ResultController();
-    changeScreen(resultController.element);
+    Application.showLoadScreen();
 
     Loader.saveResults(gameModel.gameResult, gameModel.userName)
       .then(() => Loader.loadResults(gameModel.userName))
       .then((scores) => gameModel.adaptScores(scores))
-      .then(() => resultController.showResults(gameModel))
+      .then(() => changeScreen(new ResultController(gameModel).element))
       .catch(Application.showModalError);
   }
 
-  static showModalError(error) {
-    const modalErrorView = new ModalErrorView(error.message);
-    appendModal(modalErrorView.element);
+  static showLoadScreen() {
+    const introView = new IntroView();
+    changeScreen(introView.element);
   }
 
   static showModalConfirm() {
     const modalConfirmController = new ModalConfirmController();
     appendModal(modalConfirmController.element);
+  }
+
+  static showModalError(error) {
+    const modalErrorView = new ModalErrorView(error.message);
+    appendModal(modalErrorView.element);
   }
 
 }

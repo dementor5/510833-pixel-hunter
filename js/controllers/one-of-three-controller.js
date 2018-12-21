@@ -5,11 +5,8 @@ export default class OneOfThreeController {
   constructor(level, statsTemplate, continueGame) {
     const oneOfThreeView = new OneOfThreeView(level, statsTemplate);
 
-    oneOfThreeView.onClick = (target) => {
-      if (!target.alt) {
-        return;
-      }
-      const imageNumber = target.alt[target.alt.length - 1];
+    oneOfThreeView.onClick = (image) => {
+      const imageNumber = image.alt[image.alt.length - 1];
       const answerIndex = imageNumber - 1;
       const answers = {question1: answerIndex};
       continueGame(answers);

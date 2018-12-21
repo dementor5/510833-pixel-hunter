@@ -3,7 +3,11 @@ import {resize} from './resize';
 export default class ImagesLoader {
 
   constructor(model) {
-    return Promise.all(model.levels.map((level) => {
+    this._model = model;
+  }
+
+  loadImages() {
+    return Promise.all(this._model.levels.map((level) => {
       return Promise.all(level.answers.map((answer) => {
         return this._loadImage(answer.image.url)
           .then((image) => {
@@ -20,8 +24,8 @@ export default class ImagesLoader {
         return level;
       });
     })).then((newLevels) => {
-      model.levels = newLevels;
-      return model;
+      this._model.levels = newLevels;
+      return this._model;
     });
   }
 

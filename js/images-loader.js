@@ -6,27 +6,27 @@ export default class ImagesLoader {
     this._model = model;
   }
 
-  loadImages() {
-    return Promise.all(this._model.levels.map((level) => {
-      return Promise.all(level.answers.map((answer) => {
-        return this._loadImage(answer.image.url)
-          .then((image) => {
-            const frameSize = Frame2Size[level.type];
-            const size = {width: image.naturalWidth, height: image.naturalHeight};
-            const newSize = resize(frameSize, size);
-            const newImage = Object.assign({}, answer.image, newSize);
+  async loadImages() {
+    const levelsPromises = this._model.levels.map(async (level) => {
+      const answersPromises = level.answers.map(async (answer) => {
+        const frameSize = Frame2Size[level.type];
+        const image = await this._loadImage(answer.image.url);
+        const size = {width: image.naturalWidth, height: image.naturalHeight};
+        const newSize = resize(frameSize, size);
 
-            answer.image = newImage;
-            return answer;
-          });
-      })).then((newAnswers) => {
-        level.answers = newAnswers;
-        return level;
+        const newImage = Object.assign({}, answer.image, newSize);
+        answer.image = newImage;
+        return answer;
       });
-    })).then((newLevels) => {
-      this._model.levels = newLevels;
-      return this._model;
+
+      const newAnswers = await Promise.all(answersPromises);
+      level.answers = newAnswers;
+      return level;
     });
+
+    const newLevels = await Promise.all(levelsPromises);
+    this._model.levels = newLevels;
+    return this._model;
   }
 
   _loadImage(url) {
@@ -37,4 +37,5 @@ export default class ImagesLoader {
       image.src = url;
     });
   }
+
 }

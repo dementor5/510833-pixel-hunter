@@ -32,7 +32,7 @@ export function checkTime(time) {
 }
 
 export function checkAnswer(userAnswer, level, timeEstimate) {
-  let result = `wrong`;
+  const result = `wrong`;
   if (!userAnswer) {
     return result;
   }
@@ -44,7 +44,7 @@ export function checkAnswer(userAnswer, level, timeEstimate) {
 }
 
 function getCheckFunction(levelType) {
-  let checkFunction = {};
+  let checkFunction = null;
   switch (levelType) {
     case `two-of-two`:
       checkFunction = checkTwoOfTwo;
@@ -78,7 +78,7 @@ export function getCorrectAnswer(answers) {
 }
 
 export function getUniqueArrayElement(array) {
-  let element = {};
+  const element = {};
   for (const it of array) {
     const index = array.indexOf(it);
     if (index === array.lastIndexOf(it)) {

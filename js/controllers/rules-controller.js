@@ -7,15 +7,8 @@ export default class RulesController {
   constructor() {
     const headerController = new HeaderController();
     const rulesView = new RulesView();
-    let userName = ``;
 
-    rulesView.onInput = (field, submitButton) => {
-      userName = field.value;
-      let isEmpty = userName.length === 0;
-      submitButton.disabled = isEmpty;
-    };
-
-    rulesView.onSubmit = () => {
+    rulesView.onSubmit = (userName) => {
       Application.showGame(userName);
     };
 

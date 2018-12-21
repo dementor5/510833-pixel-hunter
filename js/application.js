@@ -10,7 +10,7 @@ import ModalErrorView from './views/modal-error-view';
 import ModalConfirmController from './controllers/modal-confirm-controller';
 import {crossfadeChangeScreen, changeScreen, appendModal} from './util';
 
-let gameModel = [];
+let gameModel = null;
 
 export default class Application {
 

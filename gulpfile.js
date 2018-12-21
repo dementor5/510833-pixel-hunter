@@ -10,12 +10,15 @@ const server = require(`browser-sync`).create();
 const mqpacker = require(`css-mqpacker`);
 const minify = require(`gulp-csso`);
 const rename = require(`gulp-rename`);
-const rollup = require(`gulp-better-rollup`);
 const sourcemaps = require(`gulp-sourcemaps`);
+const rollup = require(`gulp-better-rollup`);
+const resolve = require(`rollup-plugin-node-resolve`);
+const commonjs = require(`rollup-plugin-commonjs`);
+const babel = require(`rollup-plugin-babel`);
 const imagemin = require(`gulp-imagemin`);
 const svgstore = require(`gulp-svgstore`);
+const uglify = require(`gulp-uglify`);
 const mocha = require(`gulp-mocha`);
-const commonjs = require(`rollup-plugin-commonjs`);
 
 gulp.task(`style`, () => {
   return gulp.src(`sass/style.scss`).
@@ -53,7 +56,18 @@ gulp.task(`scripts`, () => {
   return gulp.src(`js/main.js`)
     .pipe(plumber())
     .pipe(sourcemaps.init())
-    .pipe(rollup({}, `iife`))
+    .pipe(rollup({
+      plugins: [
+        resolve({browser: true}), // resolve node_modules
+        commonjs(), // resolve commonjs imports
+        babel({
+          babelrc: false,
+          exclude: `node_modules/**`,
+          presets: [`@babel/env`],
+        }),
+      ]
+    }, `iife`))
+    .pipe(uglify())
     .pipe(sourcemaps.write(``))
     .pipe(gulp.dest(`build/js`));
 });

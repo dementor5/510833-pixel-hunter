@@ -11,8 +11,8 @@ const ONE_SECOND = 1000;
 export default class GameController {
   constructor(model) {
     this._model = model;
-    this._header = this._newHeader;
-    this._content = this._newContent;
+    this._header = this._getNewHeader();
+    this._content = this._getNewContent();
 
     this._root = document.createElement(`div`);
     this._root.appendChild(this._header.element);
@@ -29,12 +29,11 @@ export default class GameController {
 
   _continueGame(userAnswer) {
     this._stopTimer();
-    const model = this._model;
-    model.checkAnswer(userAnswer);
+    this._model.checkAnswer(userAnswer);
     this._model.resetTimer();
 
-    if (model.canContinue) {
-      model.changeLevel();
+    if (this._model.canContinue) {
+      this._model.changeLevel();
       this._updateContent();
       this.startGame();
     } else {
@@ -62,32 +61,32 @@ export default class GameController {
 
   _updateContent() {
     this._updateHeader();
-    const newContent = this._newContent;
+    const newContent = this._getNewContent();
     this._root.replaceChild(newContent.element, this._content.element);
     this._content = newContent;
   }
 
   _updateHeader() {
-    const newHeader = this._newHeader;
+    const newHeader = this._getNewHeader();
     this._root.replaceChild(newHeader.element, this._header.element);
     this._header = newHeader;
   }
 
-  get _newHeader() {
+  _getNewHeader() {
     const barView = new BarView(this._model.reminedTime, this._model.game.livesCount);
     const header = new HeaderController(barView.template);
     return header;
   }
 
-  get _newContent() {
-    const model = this._model;
-    const statsView = new StatsView(model.game.answerResults);
+  _getNewContent() {
+    const statsView = new StatsView(this._model.game.answerResults);
     const continueGame = this._continueGame.bind(this);
-    const content = new this._AnswerController(model.level, statsView.template, continueGame);
+    const AnswerController = this._getAnswerController();
+    const content = new AnswerController(this._model.level, statsView.template, continueGame);
     return content;
   }
 
-  get _AnswerController() {
+  _getAnswerController() {
     const type = this._model.level.type;
 
     let AnswerController;

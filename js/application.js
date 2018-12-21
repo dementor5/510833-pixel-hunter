@@ -14,16 +14,16 @@ let gameModel = [];
 
 export default class Application {
 
-  static start() {
+  static async start() {
     Application.showLoadScreen();
-
-    Loader.loadData()
-      .then((levels) => {
-        gameModel = new GameModel(levels);
-      })
-      .then(() => new ImagesLoader(gameModel).loadImages())
-      .then(Application.showGreeting)
-      .catch(Application.showModalError);
+    try {
+      const levels = await Loader.loadData();
+      gameModel = new GameModel(levels);
+      await new ImagesLoader(gameModel).loadImages();
+      Application.showGreeting();
+    } catch (e) {
+      Application.showModalError(e);
+    }
   }
 
   static showGreeting() {
@@ -44,14 +44,17 @@ export default class Application {
     gameController.startGame();
   }
 
-  static showStats() {
+  static async showStats() {
     Application.showLoadScreen();
 
-    Loader.saveResults(gameModel.gameResult, gameModel.userName)
-      .then(() => Loader.loadResults(gameModel.userName))
-      .then((scores) => gameModel.adaptScores(scores))
-      .then(() => changeScreen(new ResultController(gameModel).element))
-      .catch(Application.showModalError);
+    try {
+      await Loader.saveResults(gameModel.gameResult, gameModel.userName);
+      const scores = await Loader.loadResults(gameModel.userName);
+      gameModel.adaptScores(scores);
+      changeScreen(new ResultController(gameModel).element);
+    } catch (e) {
+      Application.showModalError(e);
+    }
   }
 
   static showLoadScreen() {

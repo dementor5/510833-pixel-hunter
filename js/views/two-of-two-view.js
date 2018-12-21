@@ -54,6 +54,6 @@ export default class TwoOfTwoView extends AbstractView {
   onFormChange() {}
 
   _getHintTemplate(value) {
-    return value ? `<div style="font-size: 22px; position: relative; bottom: 112%;">${value}</div>` : ``;
+    return value ? `<div class="game__hint">${value}</div>` : ``;
   }
 }

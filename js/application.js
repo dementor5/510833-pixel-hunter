@@ -1,6 +1,7 @@
 import GameModel from './game-model';
 import LoadingIndicatorView from './views/loading-indicator-view';
 import Loader from './loader';
+import ImagesLoader from './images-loader';
 import IntroController from './controllers/intro-controller';
 import GreetingController from './controllers/greeting-controller';
 import RulesController from './controllers/rules-controller';
@@ -22,6 +23,7 @@ export default class Application {
       .then((levels) => {
         gameModel = new GameModel(levels);
       })
+      .then(() => new ImagesLoader(gameModel))
       .then(() => loadingIndicatorView.stop())
       .then(Application.showIntro)
       .catch(Application.showModalError);

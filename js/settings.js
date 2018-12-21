@@ -11,5 +11,11 @@ export const Rule = {
 };
 export const APP_ID = 68466762;
 export const SERVER_URL = `https://es.dump.academy/pixel-hunter`;
-export const DEBUG = false;
+export const DEBUG = true;
 export const Type2Hint = {painting: ` (рисунок)`, photo: ` (фото)`};
+export const Frame2Size = {
+  'tinder-like': {width: 705, height: 455},
+  'two-of-two': {width: 468, height: 458},
+  'one-of-three': {width: 304, height: 455},
+
+};

@@ -63,6 +63,10 @@ export default class GameModel {
     return Rule.TIMEOUT_ANSWER_TIME - this.game.time;
   }
 
+  set levels(levels) {
+    this._data.levels = levels;
+  }
+
   set game(game) {
     this.game = game;
   }

@@ -1,5 +1,7 @@
 import TinderLikeView from '../views/tinder-like-view';
 
+const INPUTS_FIELD_NAME = `question1`;
+
 export default class TinderLikeController {
 
   constructor(level, statsTemplate, continueGame) {
@@ -7,10 +9,10 @@ export default class TinderLikeController {
 
     oneOfTwoView.onAnswer = (form) => {
       const formData = new FormData(form);
-      if (!formData.has(`question1`)) {
+      if (!formData.has(INPUTS_FIELD_NAME)) {
         return;
       }
-      const answer = {question1: formData.get(`question1`)};
+      const answer = {question1: formData.get(INPUTS_FIELD_NAME)};
       continueGame(answer);
     };
 

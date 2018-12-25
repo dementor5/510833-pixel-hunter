@@ -1,6 +1,8 @@
+import {createElementWith} from '../util.js';
 import BarView from '../views/bar-view';
 import HeaderController from './header-controller';
 import StatsView from '../views/stats-view';
+import {LevelType, TimeEstimate} from '../settings';
 import TinderLikeController from './tinder-like-controller';
 import OneOfThreeController from './one-of-three-controller';
 import TwoOfTwoController from './two-of-two-controller';
@@ -13,10 +15,7 @@ export default class GameController {
     this._model = model;
     this._header = this._getNewHeader();
     this._content = this._getNewContent();
-
-    this._root = document.createElement(`div`);
-    this._root.appendChild(this._header.element);
-    this._root.appendChild(this._content.element);
+    this._root = createElementWith(this._header.element, this._content.element);
   }
 
   get element() {
@@ -49,7 +48,7 @@ export default class GameController {
         this._continueGame();
       }
       this._header.timerValue = this._model.reminedTime;
-      if (this._model.game.timeEstimate === `warning`) {
+      if (this._model.game.timeEstimate === TimeEstimate.WARNING) {
         this._header.blinkTimer();
       }
     }, ONE_SECOND);
@@ -89,15 +88,15 @@ export default class GameController {
   _getAnswerController() {
     const type = this._model.level.type;
 
-    let AnswerController;
+    let AnswerController = null;
     switch (type) {
-      case `tinder-like`:
+      case LevelType.TINDER_LIKE:
         AnswerController = TinderLikeController;
         break;
-      case `one-of-three`:
+      case LevelType.ONE_OF_THREE:
         AnswerController = OneOfThreeController;
         break;
-      case `two-of-two`:
+      case LevelType.TWO_OF_TWO:
         AnswerController = TwoOfTwoController;
         break;
       default:

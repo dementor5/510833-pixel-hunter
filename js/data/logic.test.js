@@ -15,6 +15,28 @@ import {
   resetTimer,
 } from '../logic.js';
 
+const checkTimeFunction = () => {
+  it(`shold return 'fast' if time to answer on question < 10`, () => {
+    const time = 8;
+    assert.equal(checkTime(time), `fast`);
+  });
+  it(`shold return 'correct' if time to answer on question >= 10 and <= 20`, () => {
+    const time = 15;
+    assert.equal(checkTime(time), `correct`);
+  });
+  it(`shold return 'slow' if time to answer on question > 20 and <= 25`, () => {
+    const time = 22;
+    assert.equal(checkTime(time), `slow`);
+  });
+  it(`shold return 'warnging' if time to answer on question > 25 and <= 30`, () => {
+    const time = 27;
+    assert.equal(checkTime(time), `warning`);
+  });
+  it(`shold return false if time to answer on question > 30`, () => {
+    const time = 31;
+    assert.equal(checkTime(time), false);
+  });
+};
 
 describe(`logic.test.js`, () => {
 
@@ -313,34 +335,3 @@ describe(`logic.test.js`, () => {
   });
 
 });
-
-function checkTimeFunction() {
-  it(`shold return 'fast' if time to answer on question < 10`, () => {
-    const time = 8;
-    assert.equal(checkTime(time), `fast`);
-  });
-  it(`shold return 'correct' if time to answer on question >= 10 and <= 20`, () => {
-    const time = 15;
-    assert.equal(checkTime(time), `correct`);
-  });
-  it(`shold return 'slow' if time to answer on question > 20 and <= 25`, () => {
-    const time = 22;
-    assert.equal(checkTime(time), `slow`);
-  });
-  it(`shold return 'warnging' if time to answer on question > 25 and <= 30`, () => {
-    const time = 27;
-    assert.equal(checkTime(time), `warning`);
-  });
-  it(`shold return false if time to answer on question > 30`, () => {
-    const time = 31;
-    assert.equal(checkTime(time), false);
-  });
-  it(`argument should not be a non number vaule`, () => {
-    const time = `some string`;
-    assert.throws(() => checkTime(time), `time should be of type number`);
-  });
-  it(`argument should not be negative value`, () => {
-    const time = -10;
-    assert.throws(() => checkTime(time), `time should not be negative value`);
-  });
-}

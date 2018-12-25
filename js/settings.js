@@ -9,13 +9,24 @@ export const Rule = {
   TIMEOUT_ANSWER_TIME: 30,
   WARNING_ANSWER_TIME: 5,
 };
+export const LevelType = {
+  TINDER_LIKE: `tinder-like`,
+  ONE_OF_THREE: `one-of-three`,
+  TWO_OF_TWO: `two-of-two`,
+};
+export const TimeEstimate = {
+  FAST: `fast`,
+  CORRECT: `correct`,
+  SLOW: `slow`,
+  WARNING: `warning`,
+  TIMEOUT: false,
+};
 export const Type2Hint = {painting: ` (рисунок)`, photo: ` (фото)`};
 export const Frame2Size = {
   'tinder-like': {width: 705, height: 455},
   'two-of-two': {width: 468, height: 458},
   'one-of-three': {width: 304, height: 455},
 };
-
 export const APP_ID = 68466762;
 export const SERVER_URL = `https://es.dump.academy/pixel-hunter`;
 export const DEBUG = false;

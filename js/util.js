@@ -1,27 +1,32 @@
+const REMOVE_DELAY = 2000;
+const CONTAINER_TAG = `div`;
 const mainEl = document.querySelector(`#main`);
-const removeDelay = 2000;
 
-export function render(template = ``) {
-  const wrapper = document.createElement(`div`);
+export const render = (template = ``) => {
+  const wrapper = document.createElement(CONTAINER_TAG);
   wrapper.innerHTML = template.trim();
   return wrapper.firstChild;
-}
+};
 
-export function crossfadeChangeScreen(element) {
+export const crossfadeChangeScreen = (element) => {
   const previosScreen = mainEl.firstElementChild;
   previosScreen.classList.add(`crossfade`, `crossfade--hide`);
   element.classList.add(`crossfade`, `crossfade--show`);
   mainEl.appendChild(element);
   setTimeout(() => {
     previosScreen.remove();
-  }, removeDelay);
-}
+  }, REMOVE_DELAY);
+};
 
-export function changeScreen(element) {
+export const changeScreen = (element) => {
   mainEl.innerHTML = ``;
   mainEl.appendChild(element);
-}
+};
 
-export function appendModal(element) {
-  document.body.appendChild(element);
-}
+export const appendModal = (element) => document.body.appendChild(element);
+
+export const createElementWith = (...elements) => {
+  const wrapper = document.createElement(CONTAINER_TAG);
+  elements.forEach((element) => wrapper.appendChild(element));
+  return wrapper;
+};

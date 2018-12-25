@@ -21,8 +21,8 @@ export default class Application {
       gameModel = new GameModel(levels);
       await new ImagesLoader(gameModel).loadImages();
       Application.showGreeting();
-    } catch (e) {
-      Application.showModalError(e);
+    } catch (error) {
+      Application.showModalError(error);
     }
   }
 
@@ -34,7 +34,7 @@ export default class Application {
   static showRules() {
     const rulesController = new RulesController();
     changeScreen(rulesController.element);
-
+    rulesController.focusNameField();
   }
 
   static showGame(userName) {
@@ -52,8 +52,8 @@ export default class Application {
       const scores = await Loader.loadResults(gameModel.userName);
       gameModel.adaptScores(scores);
       changeScreen(new ResultController(gameModel).element);
-    } catch (e) {
-      Application.showModalError(e);
+    } catch (error) {
+      Application.showModalError(error);
     }
   }
 

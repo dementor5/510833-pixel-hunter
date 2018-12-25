@@ -23,11 +23,11 @@ export default class RulesView extends AbstractView {
 
   bind() {
     const rulesForm = this._element.querySelector(`.rules__form`);
-    const fieldNameEl = rulesForm.querySelector(`.rules__input`);
+    this._fieldNameEl = rulesForm.querySelector(`.rules__input`);
     const submitButton = rulesForm.querySelector(`.rules__button`);
     let userName = ``;
 
-    fieldNameEl.addEventListener(`input`, (evt) => {
+    this._fieldNameEl.addEventListener(`input`, (evt) => {
       userName = evt.target.value;
       const isEmpty = userName.length === 0;
       submitButton.disabled = isEmpty;
@@ -37,6 +37,10 @@ export default class RulesView extends AbstractView {
       evt.preventDefault();
       this.onSubmit(userName);
     });
+  }
+
+  focusNameField() {
+    this._fieldNameEl.focus();
   }
 
   onSubmit() {}

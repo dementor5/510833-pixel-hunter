@@ -1,5 +1,7 @@
 import AbstractView from '../abstract-view';
 
+const ESCAPE_KEYBOARD_BUTTON = `Escape`;
+
 export default class modalConfirmView extends AbstractView {
 
   get template() {
@@ -43,7 +45,7 @@ export default class modalConfirmView extends AbstractView {
   }
 
   _onEscPress(evt) {
-    if (evt.code === `Escape`) {
+    if (evt.code === ESCAPE_KEYBOARD_BUTTON) {
       this.close();
     }
   }

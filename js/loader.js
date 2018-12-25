@@ -26,15 +26,15 @@ export default class Loader {
   }
 }
 
-function checkStatus(response) {
+const checkStatus = (response) => {
   if (response.ok) {
     return response;
-  } else {
-    throw new Error(response.status);
   }
-}
 
-function toJSON(res) {
+  throw new Error(response.status);
+};
+
+const toJSON = (res) => {
   return res.json();
-}
+};
 

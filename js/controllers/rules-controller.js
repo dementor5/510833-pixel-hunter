@@ -1,3 +1,4 @@
+import {createElementWith} from '../util.js';
 import HeaderController from './header-controller';
 import RulesView from '../views/rules-view';
 import Application from '../application';
@@ -6,19 +7,21 @@ export default class RulesController {
 
   constructor() {
     const headerController = new HeaderController();
-    const rulesView = new RulesView();
+    this._rulesView = new RulesView();
 
-    rulesView.onSubmit = (userName) => {
+    this._rulesView.onSubmit = (userName) => {
       Application.showGame(userName);
     };
 
-    this._root = document.createElement(`div`);
-    this._root.appendChild(headerController.element);
-    this._root.appendChild(rulesView.element);
+    this._root = createElementWith(headerController.element, this._rulesView.element);
   }
 
   get element() {
     return this._root;
+  }
+
+  focusNameField() {
+    this._rulesView.focusNameField();
   }
 
 }

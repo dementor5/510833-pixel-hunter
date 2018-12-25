@@ -1,3 +1,4 @@
+import {createElementWith} from '../util.js';
 import HeaderController from './header-controller';
 import StatsView from '../views/stats-view';
 import ResultSuccessView from '../views/result-success-view';
@@ -8,9 +9,7 @@ export default class ResultConroller {
   constructor(model) {
     this._model = model;
     const headerController = new HeaderController();
-    this._root = document.createElement(`div`);
-    this._root.appendChild(headerController.element);
-    this._root.appendChild(this._resultView.element);
+    this._root = createElementWith(headerController.element, this._resultView.element);
   }
 
   get element() {

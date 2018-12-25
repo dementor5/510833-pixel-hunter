@@ -1,104 +1,96 @@
-import {Rule} from './settings';
+import {Rule, LevelType, TimeEstimate} from './settings';
 
-export function tick(time) {
+const RESPONSE_INCORRECT_STATUS = `wrong`;
+const START_WARNING_TIME = Rule.TIMEOUT_ANSWER_TIME - Rule.WARNING_ANSWER_TIME;
+
+export const tick = (time) => {
   return ++time;
-}
+};
 
-export function resetTimer() {
+export const resetTimer = () => {
   return 0;
-}
+};
 
-export function checkTime(time) {
-  if (typeof time !== `number`) {
-    throw new Error(`time should be of type number`);
-  }
-  if (time < 0) {
-    throw new Error(`time should not be negative value`);
-  }
-
-  const startWarningAnimationTime = Rule.TIMEOUT_ANSWER_TIME - Rule.WARNING_ANSWER_TIME;
-
-  let estimate = `fast`;
+export const checkTime = (time) => {
+  let estimate = TimeEstimate.FAST;
   if (time >= Rule.FAST_ANSWER_TIME && time <= Rule.SLOW_ANSWER_TIME) {
-    estimate = `correct`;
-  } else if (time > Rule.SLOW_ANSWER_TIME && time <= startWarningAnimationTime) {
-    estimate = `slow`;
-  } else if (time > startWarningAnimationTime && time <= Rule.TIMEOUT_ANSWER_TIME) {
-    estimate = `warning`;
+    estimate = TimeEstimate.CORRECT;
+  } else if (time > Rule.SLOW_ANSWER_TIME && time <= START_WARNING_TIME) {
+    estimate = TimeEstimate.SLOW;
+  } else if (time > START_WARNING_TIME && time <= Rule.TIMEOUT_ANSWER_TIME) {
+    estimate = TimeEstimate.WARNING;
   } else if (time > Rule.TIMEOUT_ANSWER_TIME) {
-    estimate = false;
+    estimate = TimeEstimate.TIMEOUT;
   }
   return estimate;
-}
+};
 
-export function checkAnswer(userAnswer, level, timeEstimate) {
-  const result = `wrong`;
+export const checkAnswer = (userAnswer, level, timeEstimate) => {
   if (!userAnswer) {
-    return result;
+    return RESPONSE_INCORRECT_STATUS;
   }
-  if (timeEstimate === `warning`) {
-    timeEstimate = `slow`;
+  if (timeEstimate === TimeEstimate.WARNING) {
+    timeEstimate = TimeEstimate.SLOW;
   }
   const checkFunction = getCheckFunction(level.type);
-  return checkFunction(level.answers, userAnswer) ? timeEstimate : result;
-}
+  return checkFunction(level.answers, userAnswer) ? timeEstimate : RESPONSE_INCORRECT_STATUS;
+};
 
-function getCheckFunction(levelType) {
+const getCheckFunction = (levelType) => {
   let checkFunction = null;
   switch (levelType) {
-    case `two-of-two`:
+    case LevelType.TWO_OF_TWO:
       checkFunction = checkTwoOfTwo;
       break;
-    case `tinder-like`:
+    case LevelType.TINDER_LIKE:
       checkFunction = checkOneOfTwo;
       break;
-    case `one-of-three`:
+    case LevelType.ONE_OF_THREE:
       checkFunction = checkOneOfThree;
   }
   return checkFunction;
-}
+};
 
-export function checkTwoOfTwo(correctAnswers, answer) {
+export const checkTwoOfTwo = (correctAnswers, answer) => {
   return correctAnswers[0].type === answer.question1
     && correctAnswers[1].type === answer.question2;
-}
+};
 
-export function checkOneOfTwo(correctAnswers, answer) {
+export const checkOneOfTwo = (correctAnswers, answer) => {
   return correctAnswers[0].type === answer.question1;
-}
+};
 
-export function checkOneOfThree(correctAnswers, answer) {
+export const checkOneOfThree = (correctAnswers, answer) => {
   const correctAnswer = getCorrectAnswer(correctAnswers);
   return correctAnswer.index === answer.question1;
-}
+};
 
-export function getCorrectAnswer(answers) {
+export const getCorrectAnswer = (answers) => {
   const types = answers.map((it) => it.type);
   return getUniqueArrayElement(types);
-}
+};
 
-export function getUniqueArrayElement(array) {
-  const element = {};
+export const getUniqueArrayElement = (array) => {
+  let element = null;
   for (const it of array) {
     const index = array.indexOf(it);
     if (index === array.lastIndexOf(it)) {
-      element.index = index;
-      element.value = it;
+      element = {index, value: it};
       break;
     }
   }
   return element;
-}
+};
 
-export function checkLives(answerResult, livesCount) {
-  return answerResult === `wrong` ? --livesCount : livesCount;
-}
+export const checkLives = (answerResult, livesCount) => {
+  return answerResult === RESPONSE_INCORRECT_STATUS ? --livesCount : livesCount;
+};
 
-export function changeLevel(levelIndex) {
+export const changeLevel = (levelIndex) => {
   return ++levelIndex;
-}
+};
 
-export function adaptScore(answerResults, livesCount) {
+export const adaptScore = (answerResults, livesCount) => {
   if (!livesCount) {
     return {answerResults, lives: {count: livesCount}};
   }
@@ -118,11 +110,11 @@ export function adaptScore(answerResults, livesCount) {
     slow: {count: slow, points: slowPoints},
     totalPoints: correctPoints + livesPoints + fastPoints + slowPoints,
   };
-}
+};
 
-export function getArrayUniqueElementsCount(array) {
+export const getArrayUniqueElementsCount = (array) => {
   return array.reduce((acc, it) => {
     acc[it] = (acc[it] || 0) + 1;
     return acc;
   }, {});
-}
+};

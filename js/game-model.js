@@ -6,7 +6,7 @@ export default class GameModel {
   constructor(levels = []) {
     this._data = {
       levels,
-      game: {},
+      game: null,
       scores: [],
     };
   }
@@ -17,7 +17,7 @@ export default class GameModel {
       livesCount: Rule.INITIAL_LIVE_COUNT,
       levelIndex: 0,
       time: 0,
-      lastAnswer: {},
+      lastAnswer: null,
       timeEstimate: ``,
       answerResults: new Array(this.levels.length).fill(`unknown`),
     };

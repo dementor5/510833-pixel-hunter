@@ -14,7 +14,7 @@ export default class ImagesLoader {
         const size = {width: image.naturalWidth, height: image.naturalHeight};
         const newSize = resize(frameSize, size);
 
-        const newImage = {...answer.image, ...newSize};
+        const newImage = Object.assign({}, answer.image, newSize);
         answer.image = newImage;
         return answer;
       });
